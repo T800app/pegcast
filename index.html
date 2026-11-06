@@ -42,14 +42,20 @@ h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;letter-spacing:-.5px;color
 .cal-apple:hover{background:#f2f2f7}.planner-box{background:#f2f2f7;border:1px solid #e5e5ea;color:#3a3a3c}.muted{color:#64748b}
 .rain-alert{display:none;background:#fff2f2;border:1px solid #ffb3b3;border-left:4px solid #ff3b30;border-radius:14px;padding:14px 16px;margin-bottom:14px;font-size:.85rem;color:#d70015;align-items:center;gap:10px;word-wrap:break-word;overflow-wrap:break-word;}
 .rain-alert.show{display:flex}
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:16px;background:#e9e9eb;border-radius:14px;padding:4px}
-.tab{width:100%;padding:9px 4px;border:none;background:transparent;border-radius:10px;font-weight:600;font-size:.7rem;color:#3a3a3c;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;transition:all .2s ease;overflow:hidden;text-overflow:ellipsis;}
-.tab .svg-ic{width:14px;height:14px;flex-shrink:0}
-@media(max-width:380px){.tab{font-size:.64rem;padding:8px 1px;gap:2px}.tab .svg-ic{display:none}}
-.tab.active{background:#ffffff;color:#007AFF;box-shadow:0 2px 6px rgba(0,0,0,.12)}
-/* ÚJ HOVER EFFEKT A FÜLEKNÉL */
-.tab:not(.active):hover{background-color:#f2f2f7}
-body.dark .tab:not(.active):hover{background-color:#3a3a3c;color:#ffffff}
+
+/* === Kártya alapú, szétválasztott Apple-style Tabs === */
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px;background:transparent;padding:0}
+.tab{width:100%;padding:10px 2px;border:1px solid transparent;background:#ffffff;border-radius:14px;font-weight:600;font-size:.65rem;color:#3a3a3c;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;white-space:nowrap;transition:background-color .2s, color .2s, box-shadow .2s, transform .1s;overflow:hidden;text-overflow:ellipsis;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.04); outline: none; -webkit-tap-highlight-color: transparent;}
+.tab .svg-ic{width:20px;height:20px;flex-shrink:0;margin-right:0}
+@media(max-width:380px){.tabs{gap:4px}.tab{font-size:.6rem;padding:8px 2px;gap:4px}.tab .svg-ic{width:18px;height:18px}}
+.tab.active{background:#007AFF;color:#ffffff;box-shadow:0 2px 8px rgba(0,122,255,.25)}
+.tab:not(.active):hover{background-color:#f2f2f7;}
+.tab:active{transform:scale(.96);}
+body.dark .tabs{background:transparent}
+body.dark .tab{background:#1c1c1e;color:#8e8e93;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+body.dark .tab.active{background:#0A84FF;color:#ffffff;box-shadow:0 2px 8px rgba(10,132,255,.25)}
+body.dark .tab:not(.active):hover{background-color:#2c2c2e;color:#ffffff}
+/* === /Tabs === */
 
 .panel{display:none;animation:fadeUp .25s ease}
 .panel.active{display:block}
@@ -99,7 +105,7 @@ h3{font-size:1.05rem;font-weight:800;color:#1c1c1e;margin-bottom:14px;display:bl
 .cost-table td{font-size:.82rem;color:#1c1c1e}
 .cost-table td.mode{text-align:left;font-weight:700;display:flex;align-items:center;gap:7px;color:#1c1c1e}
 .cost-table td.co2{white-space:nowrap;font-size:.78rem;color:#8e8e93}
-.cost-table tr.best td{background:#e8f9ec;font-weight:800;color:#248a3d}.cost-table tr.best .svg-ic{stroke:#248a3d}.free-badge{font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:6px;background:#e8f9ec;color:#248a3d;white-space:nowrap}body.dark .free-badge{background:rgba(52,199,89,.2);color:#30d158}.savings-box{text-align:center;padding:20px 14px;background:#e8f9ec;border:1px solid #c8ecd4;border-radius:14px;margin-bottom:12px}.savings-title{font-size:.78rem;color:#248a3d;font-weight:700;margin-bottom:6px}.savings-big{font-size:2.4rem;font-weight:800;color:#248a3d;line-height:1.1}.savings-sub{font-size:.74rem;color:#248a3d;margin-top:6px}body.dark .savings-box{background:rgba(52,199,89,.15);border-color:rgba(52,199,89,.3)}body.dark .savings-title,body.dark .savings-big,body.dark .savings-sub{color:#30d158}body.dark select{background:#2c2c2e;color:#f2f2f7;border-color:#3a3a3c}body.dark #dryingEstimate{background:rgba(10,132,255,.12)!important;border-color:rgba(10,132,255,.3)!important}body.dark #dryingEstimate div{color:#c7c7cc!important}
+.cost-table tr.best td{background:#e8f9ec;font-weight:800;color:#248a3d}.cost-table tr.best .svg-ic{stroke:#248a3d}.free-badge{font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:6px;background:#e8f9ec;color:#248a3d;white-space:nowrap}body.dark .free-badge{background:rgba(52,199,89,.2);color:#30d158}.savings-box{text-align:center;padding:20px 14px;background:#e8f9ec;border:1px solid #c8ecd4;border-radius:14px;margin-bottom:12px}.savings-title{font-size:.78rem;color:#248a3d;font-weight:700;margin-bottom:6px}.savings-big{font-size:2.4rem;font-weight:800;color:#248a3d;line-height:1.1}.savings-sub{font-size:.74rem;color:#248a3d;margin-top:6px}body.dark .savings-box{background:rgba(52,199,89,.15);border-color:rgba(52,199,89,.3)}body.dark .savings-title,body.dark .savings-big,body.dark .savings-sub{color:#30d158}body.dark select{background:#2c2c2e;color:#f2f2f7;border-color:#3a3a3c}
 .cost-table tr:last-child td{border-bottom:none}
 .guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.stain-card{padding:10px 12px;background:#fff;border:1px solid #e5e5ea;border-radius:10px;cursor:pointer;font-weight:700;font-size:.85rem;color:#1c1c1e;transition:.15s}.stain-card .stain-detail{display:none;margin-top:6px;font-weight:400;font-size:.78rem;color:#64748b;line-height:1.5;word-wrap:break-word;overflow-wrap:break-word;}.stain-card.expanded{border-color:#007AFF;box-shadow:0 0 0 1px #007AFF;grid-column:1/-1}.stain-card.expanded .stain-detail{display:block}body.dark .stain-card{background:#222226;border-color:#2c2c2e;color:#fff}body.dark .stain-card .stain-detail{color:#94a3b8}body.dark .stain-card.expanded{border-color:#0A84FF;box-shadow:0 0 0 1px #0A84FF;grid-column:1/-1}
 .guide-card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.15s}
@@ -154,9 +160,6 @@ body.dark .card,body.dark .score-card,body.dark #cookieBanner{background:#1c1c1e
 body.dark h1,body.dark h3,body.dark .score-num,body.dark .day-name,body.dark .day-score,body.dark .factor .v,body.dark .cost-table td,body.dark .guide-card .name,body.dark .settings-row,body.dark .sym-name,body.dark .logo{color:#ffffff}
 body.dark .sub,body.dark footer,body.dark .score-label,body.dark .score-tip,body.dark .factor .l,body.dark .suffix,body.dark .sym-desc,body.dark .sym-hint,body.dark .guide-card .wears,body.dark .cost-table td.co2,body.dark #cookieBanner p{color:#8e8e93}
 body.dark .cost-row label,body.dark .sym-card.expanded .sym-desc,body.dark .sym-detail{color:#c7c7cc}
-body.dark .tabs{background:#2c2c2e}
-body.dark .tab{color:#8e8e93}
-body.dark .tab.active{background:#3a3a3c;color:#ffffff;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 body.dark .btn-primary,body.dark #acceptCookies,body.dark .sym-filter.active{background:#0A84FF}
 body.dark .btn-primary:hover,body.dark #acceptCookies:hover{background:#0066d6}
 body.dark .btn-ghost,body.dark .cal-apple,body.dark .loc-chip{background:#1c1c1e;border-color:#3a3a3c;color:#0A84FF}body.dark .planner-box{background:#2c2c2e;border-color:#3a3a3c;color:#e5e5ea}body.dark .muted{color:#94a3b8}
@@ -188,16 +191,45 @@ body.dark ::-webkit-scrollbar-thumb{background:#3a3a3c}
 .tab-hint{display:flex;gap:8px;align-items:flex-start;background:#eff6ff;border:1px solid #dbeafe;border-radius:10px;padding:9px 12px;font-size:.75rem;color:#1e40af;line-height:1.45;margin-bottom:14px;word-wrap:break-word;overflow-wrap:break-word;}
 .tab-hint svg{width:16px;height:16px;flex-shrink:0;margin-top:1px}
 body.dark .tab-hint{background:#132033;border-color:#1e3a5f;color:#93c5fd}.hint-body{flex:1;min-width:0}
-.score-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px 10px;margin-top:8px;width:100%}
-.lg-item{display:flex;align-items:flex-start;gap:6px;font-size:.72rem;line-height:1.3;padding:6px 10px;border-radius:8px;font-weight:500;text-align:left}
-.lg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.lg-bar{width:14px;height:8px;border-radius:3px;flex-shrink:0;margin-top:3px}
+
+/* === ÚJ: modern Apple-style lenyitható info-kártya === */
+.hint-collapse{background:#eff6ff;border:1px solid #dbeafe;border-radius:12px;margin-bottom:14px;overflow:hidden;transition:box-shadow .25s ease,background .2s ease}
+.hint-collapse[open]{box-shadow:none}
+.hint-collapse summary{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;font-size:.8rem;font-weight:600;color:#1e40af;list-style:none;user-select:none;-webkit-tap-highlight-color:transparent;transition:background .15s ease}
+.hint-collapse summary::-webkit-details-marker{display:none}
+.hint-collapse summary::marker{content:''}
+.hint-collapse summary:hover{background:rgba(0,122,255,.05)}
+.hint-collapse summary:focus-visible{outline:2px solid #007AFF;outline-offset:-2px}
+.hint-collapse summary .hint-ic{width:16px;height:16px;flex-shrink:0;color:#1e40af}
+.hint-collapse summary .hint-title{flex:1;line-height:1.3}
+.hint-collapse summary .chevron{width:16px;height:16px;flex-shrink:0;transition:transform .28s cubic-bezier(.4,0,.2,1);color:#1e40af;opacity:.7}
+.hint-collapse[open] summary .chevron{transform:rotate(180deg);opacity:1}
+.hint-collapse[open] summary{border-bottom:1px solid rgba(0,122,255,.12)}
+.hint-content{padding:12px 14px 14px;font-size:.75rem;color:#1e40af;line-height:1.5;animation:slideDown .22s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+#panel-today .hint-content .hint-body{padding-right:0}
+body.dark .hint-collapse{background:#132033;border-color:#1e3a5f}
+body.dark .hint-collapse summary{color:#93c5fd}
+body.dark .hint-collapse summary:hover{background:rgba(10,132,255,.10)}
+body.dark .hint-collapse summary .hint-ic,body.dark .hint-collapse summary .chevron{color:#93c5fd}
+body.dark .hint-collapse[open] summary{border-bottom-color:rgba(10,132,255,.18)}
+body.dark .hint-content{color:#93c5fd}
+/* === /ÚJ === */
+
+.hint-body{flex:1;min-width:0}
+
+/* JAVÍTOTT JELMAGYARÁZAT */
+.score-legend{display:grid;grid-template-columns:repeat(2, 1fr);gap:8px;margin-top:10px;width:100%}
+.lg-item{display:flex;align-items:center;justify-content:flex-start;gap:8px;font-size:.72rem;line-height:1.3;padding:8px 12px;border-radius:10px;font-weight:500;text-align:left;box-sizing:border-box;width:100%}
+.lg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.lg-bar{width:14px;height:8px;border-radius:3px;flex-shrink:0}
+.lg-text{flex:1;word-wrap:break-word;overflow-wrap:break-word;}
 .lg-g{background:rgba(52,199,89,.12);color:#1e7a34}.lg-o{background:rgba(255,159,10,.13);color:#925a00}.lg-r{background:rgba(255,59,48,.10);color:#ad2a1f}
 body.dark .lg-g{background:rgba(52,199,89,.18);color:#30d158}body.dark .lg-o{background:rgba(255,159,10,.18);color:#ffb340}body.dark .lg-r{background:rgba(255,59,48,.18);color:#ff6b60}
 body.dark .score-legend{color:#c7c7cc}
-#panel-today .hint-body{text-align:center;padding-right:24px}#panel-today .score-legend{justify-items:center;max-width:460px;margin:8px auto 0}
+#panel-today .hint-body{text-align:center;padding-right:0;}
+#panel-today .score-legend{max-width:460px;margin:8px auto 0}
 
-/* Új stílus a lenyitható súgóhoz */
 .how-it-works{margin-top:12px;background:#ffffff;border:1px solid #e5e5ea;border-radius:10px;padding:12px 14px;font-size:.78rem;text-align:left;color:#3a3a3c}
 .how-it-works summary{cursor:pointer;font-weight:700;color:#007AFF;outline:none;display:flex;align-items:center;gap:6px}
 .how-it-works summary::marker{color:#007AFF}
@@ -207,6 +239,13 @@ body.dark .score-legend{color:#c7c7cc}
 body.dark .how-it-works{background:#1c1c1e;border-color:#3a3a3c;color:#c7c7cc}
 body.dark .how-it-works .hiw-content{border-top-color:#2c2c2e}
 body.dark .how-it-works summary{color:#0A84FF}
+
+/* Drying time (Estimated) */
+.drying-time-label { font-size: .85rem; font-weight: 800; color: #1c1c1e; margin-bottom: 6px; }
+.drying-time-sub { font-weight: 500; color: #8e8e93; font-size: .75rem; }
+.drying-placeholder { font-size: .85rem; font-weight: 700; color: #0a3d62; }
+body.dark .drying-time-label { color: #ffffff; }
+body.dark .drying-placeholder { color: #c7c7cc; }
 </style>
 </head>
 <body>
@@ -228,7 +267,6 @@ body.dark .how-it-works summary{color:#0A84FF}
 <button class="btn btn-primary" id="searchBtn"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="btn-label">Check</span></button>
 <button class="btn btn-ghost" id="geoBtn"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span class="btn-label">My location</span></button>
 </div>
-<div class="loc-bar" id="locBar"></div>
 
 <div class="tabs">
 <button class="tab active" data-tab="today"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg>Today</button>
@@ -243,36 +281,48 @@ body.dark .how-it-works summary{color:#0A84FF}
 
 <!-- TODAY PANEL -->
 <div class="panel active" id="panel-today">
-<div class="tab-hint">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-  <div class="hint-body">
-    <div style="text-align:center">Enter your city or postcode, or tap <strong>My location</strong>.</div>
-    <div style="margin-top:3px;text-align:center">The 0–100 score shows today's drying conditions:</div>
-    <div class="score-legend">
-      <span class="lg-item lg-g"><span class="lg-dot" style="background:#34c759"></span><strong>75+</strong> Great — hang outside</span>
-      <span class="lg-item lg-o"><span class="lg-dot" style="background:#ff9f0a"></span><strong>35–74</strong> OK — slow to dry</span>
-      <span class="lg-item lg-r"><span class="lg-dot" style="background:#ff3b30"></span><strong>&lt;35</strong> Tumble or radiator</span>
-      <span class="lg-item lg-r"><span class="lg-bar" style="background:#ff3b30"></span>Red banner = bad weather on the way</span>
-    </div>
-    
-    <!-- LENYITHATÓ SÚGÓ -->
-    <details class="how-it-works">
-      <summary>How does this work? (Click to expand)</summary>
-      <div class="hiw-content">
-        <p><strong>Drying Index (0–100):</strong> Calculated using temperature, humidity, wind, and expected rain. 75+ is great, 35–74 is okay, below 35 is poor.</p>
-        <p><strong>Current vs. Forecast:</strong> The top red banner and the "Current Weather" pill show <em>real-time conditions</em>. The drying time and the Next 3 Days list use the <em>daily summary forecast</em>.</p>
-        <p><strong>Rain Warnings:</strong> A red banner appears if rain, snow, or freezing rain is expected in the next 6 hours.</p>
+<details class="hint-collapse">
+  <summary>
+    <svg class="hint-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span class="hint-title">How to use PegCast</span>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </summary>
+  <div class="hint-content">
+    <div class="hint-body">
+      <div style="text-align:center">Enter your city or postcode, or tap <strong>My location</strong>.</div>
+      <div style="margin-top:3px;text-align:center">The 0–100 score shows today's drying conditions:</div>
+      <div class="score-legend">
+        <span class="lg-item lg-g"><span class="lg-dot" style="background:#34c759"></span><span class="lg-text"><strong>75+</strong> Great — hang outside</span></span>
+        <span class="lg-item lg-o"><span class="lg-dot" style="background:#ff9f0a"></span><span class="lg-text"><strong>35–74</strong> OK — slow to dry</span></span>
+        <span class="lg-item lg-r"><span class="lg-dot" style="background:#ff3b30"></span><span class="lg-text"><strong>&lt;35</strong> Tumble or radiator</span></span>
+        <span class="lg-item lg-r"><span class="lg-bar" style="background:#ff3b30"></span><span class="lg-text">Red banner = bad weather on the way</span></span>
       </div>
-    </details>
-
+      <details class="how-it-works">
+        <summary>How does this work? (Click to expand)</summary>
+        <div class="hiw-content">
+          <p><strong>Drying Index (0–100):</strong> Calculated using temperature, humidity, wind, and expected rain. 75+ is great, 35–74 is okay, below 35 is poor.</p>
+          <p><strong>Current vs. Forecast:</strong> The top red banner and the "Current Weather" pill show <em>real-time conditions</em>. The drying time and the Next 3 Days list use the <em>daily summary forecast</em>.</p>
+          <p><strong>Rain Warnings:</strong> A red banner appears if rain, snow, or freezing rain is expected in the next 6 hours.</p>
+        </div>
+      </details>
+    </div>
   </div>
-</div>
+</details>
 <div class="card" id="todayCard" style="display:none">
 <div class="score-card">
 <div class="score-label" id="locLabel">Today's drying index</div>
 <div class="score-num" id="scoreNum">—</div>
 <div class="score-verdict" id="scoreVerdict">—</div>
 <div class="score-tip" id="scoreTip">—</div>
+
+<!-- ÁTHELYEZETT SZÁRADÁSI IDŐ -->
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(128,128,128,.2);text-align:center;">
+  <div class="drying-time-label">Estimated drying time today <span class="drying-time-sub">(Daily forecast)</span></div>
+  <div id="dryingEstimate">
+    <div class="drying-placeholder">Check a location above — your drying time appears here.</div>
+  </div>
+</div>
+
 </div>
 <div class="factors">
 <div class="factor"><div class="v" id="fTemp">—</div><div class="l">Temperature</div></div>
@@ -281,10 +331,6 @@ body.dark .how-it-works summary{color:#0A84FF}
 <div class="factor"><div class="v" id="fRain">—</div><div class="l">Precip (day)</div></div>
 <div class="factor"><div class="v" id="fPrecip">—</div><div class="l">Current Weather</div></div>
 </div>
-<h3 style="margin-top:18px;text-align:center">Drying time today <span style="font-size:.7rem;font-weight:normal;color:#8e8e93">(Daily forecast)</span></h3>
-<div id="dryingEstimate" style="text-align:center;padding:18px 14px;background:#f0f7ff;border:1px solid #d6e8ff;border-radius:14px;margin-bottom:6px">
-<div style="font-size:.85rem;color:#0a3d62;font-weight:700">Check a location above — your drying time appears here.</div>
-</div>
 <h3>Next 3 days — best day to wash &amp; dry outside</h3>
 <div id="forecastRows"></div><div id="dayDetail" style="display:none"></div>
 </div>
@@ -292,7 +338,16 @@ body.dark .how-it-works summary{color:#0A84FF}
 
 <!-- COST PANEL -->
 <div class="panel" id="panel-cost">
-<div class="tab-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>Look up how to remove any common stain — click a stain card to see the full treatment instructions.</span></div>
+<details class="hint-collapse">
+  <summary>
+    <svg class="hint-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span class="hint-title">How to use the stain guide</span>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </summary>
+  <div class="hint-content">
+    <span>Look up how to remove any common stain — click a stain card to see the full treatment instructions.</span>
+  </div>
+</details>
 <div class="card">
 <h3>Stain removal guide</h3>
 <div class="guide-grid" id="stainGrid"></div>
@@ -313,7 +368,16 @@ body.dark .how-it-works summary{color:#0A84FF}
 <div class="panel" id="panel-guide">
 <div class="card">
 <h3>Laundry Symbol Decoder<br><span style="font-size:.78rem;font-weight:600;color:#64748b">36 care symbols (ISO 3758)</span></h3>
-<div class="tab-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span><strong>36 care symbols (ISO 3758)</strong> — wash, bleach, dry, iron &amp; professional cleaning. Filter by category, then tap any symbol for full details. Always check the actual garment label.</span></div>
+<details class="hint-collapse">
+  <summary>
+    <svg class="hint-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span class="hint-title">About care symbols</span>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </summary>
+  <div class="hint-content">
+    <span><strong>36 care symbols (ISO 3758)</strong> — wash, bleach, dry, iron &amp; professional cleaning. Filter by category, then tap any symbol for full details. Always check the actual garment label.</span>
+  </div>
+</details>
 <div class="sym-filters" id="symFilters"></div>
 <div class="sym-grid" id="symGrid"></div>
 <p style="font-size:.72rem;color:#94a3b8;margin-top:12px">Always check the actual care label on your garment — manufacturers may add extra instructions.</p>
@@ -342,7 +406,7 @@ body.dark .how-it-works summary{color:#0A84FF}
 
 <script>
 (function(){
-var WORKER_URL='https://pegcast-weather.whichischeaperapp.workers.dev'; // e.g. https://pegcast-weather.yourname.workers.dev
+var WORKER_URL='https://pegcast-weather.whichischeaperapp.workers.dev';
 var UKPLACES=[['London','London'],['Birmingham','West Midlands'],['Manchester','Greater Manchester'],['Glasgow','Glasgow City'],['Liverpool','Merseyside'],['Bristol','Bristol'],['Cardiff','Cardiff'],['Belfast','Northern Ireland'],['Leeds','West Yorkshire'],['Sheffield','South Yorkshire'],['Edinburgh','Edinburgh'],['Leicester','Leicestershire'],['Coventry','West Midlands'],['Bradford','West Yorkshire'],['Nottingham','Nottinghamshire'],['Kingston upon Hull','Yorkshire'],['Plymouth','Devon'],['Stoke-on-Trent','Staffordshire'],['Wolverhampton','West Midlands'],['Derby','Derbyshire'],['Swansea','Swansea'],['Southampton','Hampshire'],['Reading','Berkshire'],['Aberdeen','Aberdeen City'],['Portsmouth','Hampshire'],['Luton','Bedfordshire'],['Oxford','Oxfordshire'],['Middlesbrough','North Yorkshire'],['Norwich','Norfolk'],['Telford','Shropshire'],['Milton Keynes','Buckinghamshire'],['Peterborough','Cambridgeshire'],['Sunderland','Tyne and Wear'],['Newport','Newport'],['Swindon','Wiltshire'],['Poole','Dorset'],['Warrington','Cheshire'],['Ipswich','Suffolk'],['York','North Yorkshire'],['Canterbury','Kent'],['Cambridge','Cambridgeshire'],['Exeter','Devon'],['Cheltenham','Gloucestershire'],['Gloucester','Gloucestershire'],['Bath','Somerset'],['Weston-super-Mare','Somerset'],['Taunton','Somerset'],['Truro','Cornwall'],['Bournemouth','Dorset'],['Brighton','Brighton and Hove'],['Eastbourne','East Sussex'],['Hastings','East Sussex'],['Maidstone','Kent'],['Colchester','Essex'],['Chelmsford','Essex'],['Southend-on-Sea','Essex'],['Blackpool','Lancashire'],['Preston','Lancashire'],['Blackburn','Lancashire'],['Bolton','Greater Manchester'],['Wigan','Greater Manchester'],['Stockport','Greater Manchester'],['Rochdale','Greater Manchester'],['Oldham','Greater Manchester'],['Barnsley','South Yorkshire'],['Rotherham','South Yorkshire'],['Doncaster','South Yorkshire'],['Huddersfield','West Yorkshire'],['Wakefield','West Yorkshire'],['Grimsby','Lincolnshire'],['Lincoln','Lincolnshire'],['Great Yarmouth','Norfolk'],['St Albans','Hertfordshire'],['Watford','Hertfordshire'],['Aylesbury','Buckinghamshire'],['Slough','Berkshire'],['Guildford','Surrey'],['Woking','Surrey'],['Crawley','West Sussex'],['Tunbridge Wells','Kent'],['Ashford','Kent'],['Dover','Kent'],['Folkestone','Kent'],['Margate','Kent'],['Tewkesbury','Gloucestershire'],['Cirencester','Gloucestershire'],['Stroud','Gloucestershire'],['Hereford','Herefordshire'],['Worcester','Worcestershire'],['Stratford-upon-Avon','Warwickshire'],['Warwick','Warwickshire'],['Leamington Spa','Warwickshire']];
 var lastDays=[];window.lastDays=[];
 function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
@@ -365,16 +429,19 @@ function escapeHtml(s){var d=document.createElement('div');d.textContent=s;retur
 
 function loadLocs(){try{return JSON.parse(localStorage.getItem('ld_locs')||'[]');}catch(e){return[];}}
 function saveLocs(l){localStorage.setItem('ld_locs',JSON.stringify(l));renderLocBar();}
-function addLoc(q,label){var l=loadLocs();if(!l.find(function(x){return x.q===q;})){l.push({q:q,label:label});if(l.length>4)l.shift();saveLocs(l);}}
+function addLoc(q,label){var l=loadLocs();if(!l.find(function(x){return x.q===q;})){l.push({q:q,label:label});if(l.length>10)l.shift();saveLocs(l);}}
 function renderLocBar(){
-  var bar=document.getElementById('locBar');bar.innerHTML='';
-  loadLocs().forEach(function(loc){
-    var chip=document.createElement('span');chip.className='loc-chip';
-    chip.innerHTML='<svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>'+escapeHtml(loc.label)+' <span class="del" data-q="'+escapeHtml(loc.q)+'">×</span>';
-    chip.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.del'))return;check(loc.q,loc.label);});
-    bar.appendChild(chip);
-  });
-  document.getElementById('locCount').textContent=loadLocs().length;
+  var bar=document.getElementById('locBar');
+  if(bar){
+    bar.innerHTML='';
+    loadLocs().forEach(function(loc){
+      var chip=document.createElement('span');chip.className='loc-chip';
+      chip.innerHTML='<svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>'+escapeHtml(loc.label)+' <span class="del" data-q="'+escapeHtml(loc.q)+'">×</span>';
+      chip.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.del'))return;check(loc.q,loc.label);});
+      bar.appendChild(chip);
+    });
+  }
+  var lc=document.getElementById('locCount');if(lc)lc.textContent=loadLocs().length;
   var sl=document.getElementById('settingsLocs');if(sl){sl.innerHTML='';loadLocs().forEach(function(loc){var s=document.createElement('span');s.className='loc-chip';s.innerHTML=escapeHtml(loc.label)+' <span class="del" data-q="'+escapeHtml(loc.q)+'">×</span>';s.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.del'))return;check(loc.q,loc.label);});sl.appendChild(s);});}
 }
 
@@ -472,7 +539,6 @@ async function check(query,label){
     document.getElementById('fWind').textContent=Math.round(today.wind/1.60934)+' mph';
     document.getElementById('fRain').textContent=today.rain>0?today.rain.toFixed(1)+' mm':'None';
     
-    // Current weather
     var _d0=fd[0].day;
     var _cr=_d0.daily_chance_of_rain||0,_cs=_d0.daily_chance_of_snow||0;
     var _pct=Math.max(_cr,_cs);
@@ -575,7 +641,7 @@ function renderStains(){
 function estimateDrying(){
   var el=document.getElementById('dryingEstimate');if(!el)return;
   var d=window.lastDays&&window.lastDays.length?window.lastDays[0]:null;
-  if(!d){el.innerHTML='<div style="font-size:.85rem;color:#0a3d62;font-weight:700">Check a location on the Today tab — your drying time appears here.</div>';return;}
+  if(!d){el.innerHTML='<div class="drying-placeholder">Check a location above — your drying time appears here.</div>';return;}
 
   var isWet = /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(d.cond);
 
@@ -588,7 +654,7 @@ function estimateDrying(){
   h=Math.max(2,Math.min(11,h));
   var lo=Math.max(1,Math.round(h-1)), hi=Math.round(h+1);
   var msg=h>=9?'Will dry very slowly — may not be fully dry by evening':'Hang out in the morning, bring in before evening';
-  el.innerHTML='<div style="font-size:1.9rem;font-weight:800;color:#007AFF;line-height:1.1">'+lo+'–'+hi+' hours</div><div style="font-size:.78rem;color:#64748b;margin-top:6px">'+d.temp.toFixed(1)+'°C · '+Math.round(d.hum)+'% humidity · '+Math.round(d.wind/1.609)+' mph wind · score '+d.score+'/100</div><div style="font-size:.74rem;color:#8e8e93;margin-top:6px">'+msg+'</div>';
+  el.innerHTML='<div style="font-size:1.5rem;font-weight:800;color:#007AFF;line-height:1.1">'+lo+'–'+hi+' hours</div><div style="font-size:.74rem;color:#8e8e93;margin-top:6px">'+msg+'</div>';
 }
 renderStains();estimateDrying();
 
@@ -737,9 +803,6 @@ document.getElementById('year').textContent=new Date().getFullYear();
 
 renderLocBar();
 
-// auto-load removed: no saved location is loaded automatically
-
-
 var ac=document.getElementById('autocomplete');
 var cityInputEl=document.getElementById('cityInput');
 var acTimer=null;
@@ -790,7 +853,6 @@ document.getElementById('acceptCookies').addEventListener('click',function(){set
 document.getElementById('declineCookies').addEventListener('click',function(){setConsent('denied');});
 var cs=document.getElementById('cookieSettings');if(cs)cs.addEventListener('click',function(e){e.preventDefault();banner.classList.add('show');});
 
-// Dark mode toggle
 var darkBtn=document.getElementById('darkToggle');
 var sunSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
 var moonSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
