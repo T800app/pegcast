@@ -31,13 +31,16 @@ h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;letter-spacing:-.5px;color
 .search-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:nowrap;align-items:center}
 .search-row .ac-wrap{position:relative;flex:1;min-width:90px}.search-row input{width:100%;padding:9px 12px;border:1px solid #e5e5ea;border-radius:12px;font-size:.84rem;background:#ffffff;transition:.2s;color:#1c1c1e;box-sizing:border-box}#autocomplete{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#ffffff;border:1px solid #e5e5ea;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:60;max-height:240px;overflow-y:auto;display:none;text-align:left}.ac-item{padding:9px 14px;font-size:.86rem;cursor:pointer;border-bottom:1px solid #f2f2f7;color:#1c1c1e}.ac-item:last-child{border-bottom:none}.ac-item:hover{background:#f2f2f7}h3{display:flex;align-items:center;gap:8px}h3 .svg-ic{margin-right:0}
 .search-row input:focus{outline:none;border-color:#007AFF;box-shadow:0 0 0 3px rgba(0,122,255,.15)}
-.btn{padding:9px 14px;border:none;border-radius:12px;font-weight:600;cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;gap:5px;transition:all .15s ease;white-space:nowrap}.btn-label{display:inline}
+.btn{padding:9px 14px;border:none;border-radius:12px;font-weight:600;cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;gap:5px;transition:all .15s ease;white-space:nowrap;outline:none;-webkit-tap-highlight-color:transparent;}
+.btn:focus, .btn:active { outline: none !important; box-shadow: none !important; }
+.btn-label{display:inline}
 @media(max-width:400px){.btn-label{display:none}.btn{padding:9px 11px}}
 .btn-primary{background:#007AFF;color:white}
 .btn-primary:hover{background:#0066d6}
 .btn-primary:active{transform:scale(.97)}
 .btn-ghost{background:#ffffff;border:1px solid #e5e5ea;color:#007AFF}
 .btn-ghost:hover{background:#f2f2f7}
+#geoBtn { box-shadow: none !important; }
 .cal-apple{display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#007AFF;padding:10px 14px;border-radius:10px;font-weight:700;font-size:.8rem;border:1px solid #e5e5ea;cursor:pointer;transition:.15s}
 .cal-apple:hover{background:#f2f2f7}.planner-box{background:#f2f2f7;border:1px solid #e5e5ea;color:#3a3a3c}.muted{color:#64748b}
 .rain-alert{display:none;background:#fff2f2;border:1px solid #ffb3b3;border-left:4px solid #ff3b30;border-radius:14px;padding:14px 16px;margin-bottom:14px;font-size:.85rem;color:#d70015;align-items:center;gap:10px;word-wrap:break-word;overflow-wrap:break-word;}
@@ -339,7 +342,7 @@ body.dark .drying-placeholder { color: #c7c7cc; }
 
 <div class="search-row">
 <div class="ac-wrap"><input type="text" id="cityInput" placeholder="City or postcode" maxlength="40"><div id="autocomplete"></div></div>
-<button class="btn btn-primary" id="searchBtn"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="btn-label">Check</span></button>
+<button class="btn btn-ghost" id="searchBtn"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="btn-label">Check</span></button>
 <button class="btn btn-ghost" id="geoBtn"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span class="btn-label">My location</span></button>
 </div>
 
@@ -889,7 +892,7 @@ document.getElementById('searchBtn').addEventListener('click',searchCity);
 document.getElementById('cityInput').addEventListener('keydown',function(e){if(e.key==='Enter')searchCity();});
 document.getElementById('geoBtn').addEventListener('click',function(){
   if(!navigator.geolocation){alert('Geolocation not supported. Please enter a city.');return;}
-  navigator.geolocation.getCurrentPosition(function(pos){check(pos.coords.latitude+','+pos.coords.longitude,'Your location');},function(){alert('Could not get your location. Please enter a city.');},{timeout:10000});
+  navigator.geolocation.getCurrentPosition(function(pos){check(pos.coords.latitude+','+pos.coords.longitude);},function(){alert('Could not get your location. Please enter a city.');},{timeout:10000});
 });
 
 document.getElementById('year').textContent=new Date().getFullYear();
