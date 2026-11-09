@@ -222,7 +222,8 @@ body.dark .sym-card:not(.expanded):hover { background-color: #323236; }
 .cat-wash{background:#e8f1ff;color:#007AFF}.cat-bleach{background:#fff4e5;color:#c93400}.cat-dry{background:#e8f9ec;color:#248a3d}.cat-iron{background:#fff2f2;color:#d70015}.cat-pro{background:#f0e8ff;color:#5e33c8}
 
 header{position:relative}
-#darkToggle{position:absolute;top:0;right:0;width:38px;height:38px;border-radius:50%;background:#ffffff;border:1px solid #e5e5ea;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1c1c1e;transition:.2s;padding:0}
+#darkToggle{position:absolute;top:0;right:0;width:38px;height:38px;border-radius:50%;background:#ffffff;border:1px solid #e5e5ea;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1c1c1e;transition:.2s;padding:0; outline: none; -webkit-tap-highlight-color: transparent; box-shadow: none;}
+#darkToggle:focus, #darkToggle:active { outline: none !important; box-shadow: none !important; }
 #darkToggle:hover{transform:scale(1.08)}
 #darkToggle svg{width:18px;height:18px}
 body.dark{background:#000000;color:#f2f2f7}
