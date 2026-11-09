@@ -188,7 +188,9 @@ footer a{color:#007AFF;font-weight:600}
 #declineCookies:hover{background:#e9e9eb}
 .svg-ic{width:16px;height:16px;flex-shrink:0;vertical-align:middle;margin-right:5px}
 .sym-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.sym-filter{padding:7px 14px;border:1px solid #e5e5ea;background:#fff;color:#3a3a3c;border-radius:99px;font-size:.74rem;font-weight:600;cursor:pointer;transition:.15s}
+/* Javítás a szűrőgombok kattintási árnyékára */
+.sym-filter{padding:7px 14px;border:1px solid #e5e5ea;background:#fff;color:#3a3a3c;border-radius:99px;font-size:.74rem;font-weight:600;cursor:pointer;transition:.15s; outline: none; box-shadow: none; -webkit-tap-highlight-color: transparent;}
+.sym-filter:focus, .sym-filter:active { outline: none !important; box-shadow: none !important; }
 .sym-filter:hover{border-color:#007AFF;color:#007AFF}
 .sym-filter.active{background:#007AFF;color:#fff;border-color:transparent}
 .sym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:10px;align-content:start;align-items:stretch}
