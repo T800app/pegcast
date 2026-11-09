@@ -347,6 +347,31 @@ body.dark .how-it-works{background:#2c2c2e;color:#c7c7cc}
 .drying-placeholder { font-size: .85rem; font-weight: 700; color: #0a3d62; }
 body.dark .drying-time-label { color: #ffffff; }
 body.dark .drying-placeholder { color: #c7c7cc; }
+
+/* === SEO article accordion (drying guide & FAQ) === */
+.peg-article{padding:2px 0 4px;font-size:.85rem;color:#3a3a3c;line-height:1.6}
+.peg-article .pa-lead{font-size:.86rem;color:#3a3a3c;margin-bottom:10px}
+.peg-article h2{font-size:clamp(.95rem,2.6vw,1.05rem);font-weight:800;color:#1c1c1e;margin:18px 0 8px;line-height:1.3;letter-spacing:-.2px}
+.peg-article h2:first-of-type{margin-top:6px}
+.peg-article h3{font-size:.86rem;font-weight:700;color:#1c1c1e;margin:12px 0 6px;display:block}
+.peg-article p{margin-bottom:9px}
+.peg-article ul,.peg-article ol{margin:0 0 10px 18px}
+.peg-article li{margin-bottom:5px}
+.peg-article strong{color:#1c1c1e}
+.peg-article a{color:#007AFF;text-decoration:none}
+.peg-tips{display:grid;grid-template-columns:1fr;gap:8px;margin:8px 0 12px}
+@media(min-width:600px){.peg-tips{grid-template-columns:1fr 1fr}}
+.peg-tip{background:#f2f2f7;border-radius:12px;padding:10px 12px;font-size:.8rem;line-height:1.5}
+.peg-tip strong{display:block;color:#1c1c1e;margin-bottom:2px;font-size:.82rem}
+.peg-faq{margin-top:6px}
+.peg-q{font-weight:700;color:#1c1c1e;margin:12px 0 3px;font-size:.85rem}
+.peg-a{margin:0 0 8px;font-size:.82rem;color:#3a3a3c;line-height:1.55}
+body.dark .peg-article{color:#c7c7cc}
+body.dark .peg-article .pa-lead{color:#c7c7cc}
+body.dark .peg-article h2,body.dark .peg-article h3,body.dark .peg-article strong,body.dark .peg-q{color:#ffffff}
+body.dark .peg-tip{background:#2c2c2e}
+body.dark .peg-tip strong{color:#ffffff}
+body.dark .peg-a{color:#c7c7cc}
 </style>
 </head>
 <body>
@@ -410,6 +435,111 @@ body.dark .drying-placeholder { color: #c7c7cc; }
     </div>
   </div>
 </details>
+
+<details class="hint-collapse" id="guideAccordion">
+  <summary>
+    <svg class="hint-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>
+    <span class="hint-title">Drying guide &amp; FAQ — UK laundry tips</span>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </summary>
+  <div class="hint-content">
+    <div class="peg-article">
+      <p class="pa-lead">PegCast (Peg Forecast) turns the UK weather forecast into one simple number: today's drying index. Instead of guessing whether the washing line will work, check the score, hang your laundry on the best days, and save money on tumble-dryer electricity. This free guide explains how the score works, when British weather suits outdoor drying, and practical tips to get clothes dry quickly, fresh and crease-free.</p>
+
+      <h2>How the PegCast drying score works</h2>
+      <p>Across the daylight drying window — roughly one hour after sunrise to one hour before sunset, between about 7am and 8pm — PegCast blends four live weather readings into a single 0–100 score. No single factor decides the result: a warm but humid, windless day can still dry slowly, while a cool, dry, breezy day can work surprisingly well.</p>
+      <div class="peg-tips">
+        <div class="peg-tip"><strong>Temperature (35%)</strong>Warmer air absorbs more moisture, so water evaporates from fabric faster. Around 15°C or above with sun is comfortable; below about 8°C outdoor drying becomes slow.</div>
+        <div class="peg-tip"><strong>Humidity (35%)</strong>Damp, humid air can only take a little extra water. Below 60% humidity dries well; above 80% the washing may stay damp all day.</div>
+        <div class="peg-tip"><strong>Wind (30%)</strong>Moving air sweeps moisture away from the fabric. A gentle breeze is ideal; still air lets a humid layer build around each item.</div>
+        <div class="peg-tip"><strong>Rain penalty</strong>Any expected rain, drizzle, sleet or snow sharply lowers the score. The red banner warns when wet weather is likely in the next six hours.</div>
+      </div>
+      <p><strong>How to read the bands:</strong> Green (75+) means hang outside with confidence; orange (35–74) means it will dry, but slowly — hang early and bring in before evening; red (below 35) means use a tumble dryer, radiator or heated airer instead.</p>
+
+      <h2>Best time to dry clothes outside in the UK</h2>
+      <p>The UK maritime climate means drying conditions change fast, and the best days rarely arrive back-to-back. A quick forecast check before you load the machine saves wasted washes and re-washing.</p>
+      <h3>Seasons</h3>
+      <ul>
+        <li><strong>Spring (March–May):</strong> mixed — sunny, breezy days dry well; cold nights and showers are common. Watch the score before you hang out.</li>
+        <li><strong>Summer (June–August):</strong> the best drying season. Long daylight hours, warmer temperatures and occasional breezes; whites, towels and bedding benefit most.</li>
+        <li><strong>Autumn (September–November):</strong> often damp and misty; mornings stay wet and evenings bring dew. Mostly orange or red scores.</li>
+        <li><strong>Winter (December–February):</strong> cold air holds little moisture, so outdoor drying is slow and frost can stiffen fabric. Use indoor drying for most washes.</li>
+      </ul>
+      <h3>Time of day</h3>
+      <ul>
+        <li>Hang out by 10am once the morning dew has lifted; aim to finish by late afternoon.</li>
+        <li>Bring washing in before dusk — dew forms as temperatures fall and re-dampens dry clothes overnight.</li>
+        <li>Avoid washing on red-score days; use the Planner tab to pick the best of the next three days.</li>
+      </ul>
+
+      <h2>12 practical tips for faster line drying</h2>
+      <div class="peg-tips">
+        <div class="peg-tip"><strong>1. Spin longer</strong>Finish the cycle on 1200–1400 rpm for an extra two minutes; the washing machine removes far more water than the air ever will.</div>
+        <div class="peg-tip"><strong>2. Shake each item</strong>Shake and pull garments straight before pegging to reduce creases and open the fabric fibres.</div>
+        <div class="peg-tip"><strong>3. Peg cleverly</strong>Peg hems, waistbands and seams rather than shirt shoulders, to avoid visible peg marks.</div>
+        <div class="peg-tip"><strong>4. Give space</strong>Leave gaps between items so air circulates on both sides; a crowded line dries slowly.</div>
+        <div class="peg-tip"><strong>5. Turn darks inside out</strong>Protect colours from sun fading, especially reds, blacks and denim.</div>
+        <div class="peg-tip"><strong>6. Sun for whites, shade for colours</strong>Hang towels, sheets and whites in direct sun; wool, silk and darks in light shade.</div>
+        <div class="peg-tip"><strong>7. Raise the air flow</strong>Use a rotary line or freestanding airer away from walls, fences and hedges that block the breeze.</div>
+        <div class="peg-tip"><strong>8. Check the score first</strong>75+ means go; 35–74 means hang early and expect a slow day; below 35 stay indoors.</div>
+        <div class="peg-tip"><strong>9. Beat the dew</strong>Bring everything in before evening; overnight dew and high humidity undo a dry day.</div>
+        <div class="peg-tip"><strong>10. Secure heavy items</strong>Bedding, dresses and long coats catch the wind; use extra pegs on blustery days.</div>
+        <div class="peg-tip"><strong>11. Pre-treat stains</strong>Deal with fresh marks before washing using the Stain tab; never tumble or line-dry a stained item, as heat sets the mark.</div>
+        <div class="peg-tip"><strong>12. Clean the line</strong>Wipe the washing line or airer before use; a dirty line transfers marks to clean laundry.</div>
+      </div>
+
+      <h2>Fabrics that dry best outside</h2>
+      <ul>
+        <li><strong>Cotton towels, sheets and bedding:</strong> heavy and slow; choose a green, breezy day and give plenty of space.</li>
+        <li><strong>T-shirts, shirts and synthetics:</strong> lightweight polyester and cotton blends dry quickly; hang synthetics promptly to avoid stale smells.</li>
+        <li><strong>Wool, knitwear and delicates:</strong> dry flat in shade; hanging heavy wool stretches the shape.</li>
+        <li><strong>Denim and jeans:</strong> slow and heavy; turn inside out and avoid strong sun to prevent fading.</li>
+        <li><strong>Underwear and small items:</strong> fast drying; group on a small airer indoors on poor days.</li>
+      </ul>
+
+      <h2>When to dry indoors instead</h2>
+      <ul>
+        <li>Rain, drizzle, sleet or snow forecast (watch for the red banner).</li>
+        <li>Humidity around 80% or higher all day.</li>
+        <li>Frost or temperatures near or below freezing — fabric can freeze rather than dry.</li>
+        <li>High pollen days if you suffer from hay fever.</li>
+        <li>Storm-force gusts that can tear items or blow dirt onto them.</li>
+      </ul>
+      <p>Indoor options: a heated airer, a radiator with a drying rack, a dehumidifier in a closed room, or a tumble dryer on a low heat setting.</p>
+
+      <h2>Make the most of the PegCast tabs</h2>
+      <ul>
+        <li><strong>Today:</strong> live drying score, five weather factors, estimated drying time and the next three days.</li>
+        <li><strong>Planner:</strong> ranks the next three days, with a Google Calendar link and a downloadable .ics file for Apple Calendar and Outlook.</li>
+        <li><strong>Stain:</strong> 24 common stain treatments, from red wine and coffee to grass, blood and makeup.</li>
+        <li><strong>Symbols:</strong> 36 ISO 3758 care symbols decoded: wash, bleach, dry, iron and professional cleaning.</li>
+        <li><strong>Settings:</strong> manage saved locations and clear stored data; everything stays on your device.</li>
+      </ul>
+      <p><strong>Stain removal help:</strong> if a garment has a fresh mark, open the Stain tab for simple step-by-step treatments for 24 common stains, from red wine and coffee to grass, blood and makeup — always treat fresh marks before washing, because heat sets stains permanently.</p>
+
+      <h2>Frequently asked questions</h2>
+      <div class="peg-faq">
+        <div class="peg-q">What does the PegCast drying score mean?</div>
+        <p class="peg-a">It is a 0–100 index for the daylight drying window — roughly one hour after sunrise to one hour before sunset. 75+ (green) is great for outdoor drying; 35–74 (orange) means slow but possible; below 35 (red) means use a tumble dryer, radiator or heated airer.</p>
+        <div class="peg-q">What time of day should I hang washing outside?</div>
+        <p class="peg-a">Hang out around 10am after the morning dew has gone and bring everything in before late afternoon. Evening dew and falling humidity can re-dampen dry clothes overnight.</p>
+        <div class="peg-q">Can I dry clothes outside in a UK winter?</div>
+        <p class="peg-a">Only on dry, calm, frost-free days, and even then drying is slow. Most winter washes are better on a heated airer, radiator or tumble dryer; check the score before risking the line.</p>
+        <div class="peg-q">Does wind help clothes dry?</div>
+        <p class="peg-a">Yes — a gentle breeze replaces the damp air around the fabric and speeds evaporation. Very strong gusts can damage items or cause peg marks, so secure bedding and long garments.</p>
+        <div class="peg-q">Why does humidity matter for drying?</div>
+        <p class="peg-a">Humid air holds little extra moisture, so water leaves the fabric slowly. Low humidity (under about 60%) dries well; high humidity (over 80%) usually means a slow, damp day.</p>
+        <div class="peg-q">Should washing dry in sun or shade?</div>
+        <p class="peg-a">Whites, towels and bedding benefit from direct sun, which also brightens fabric. Dark colours, reds, denim and wool should dry in shade to prevent fading and stretching.</p>
+        <div class="peg-q">How long does washing take to dry outside?</div>
+        <p class="peg-a">On a warm, dry, breezy day (75+) most items dry in about 2–4 hours. On an orange day it may take all day, and on a red day it will not dry outside at all. The Today tab shows an estimated drying time.</p>
+        <div class="peg-q">Is line drying cheaper than a tumble dryer?</div>
+        <p class="peg-a">Yes. A tumble dryer cycle typically costs well over £1 in electricity, while outdoor drying uses none. On poor days a heated airer or dehumidifier usually costs less than a full tumble cycle.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
 <div class="card" id="todayCard" style="display:none">
 <div class="score-card">
 <div class="score-label" id="locLabel">Today's drying index</div>
@@ -983,5 +1113,89 @@ if(darkBtn)darkBtn.addEventListener('click',function(){applyDark(!document.body.
 
 })();
 </script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PegCast · Peg Forecast",
+  "url": "https://pegcast.co.uk/",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Web",
+  "description": "Free UK laundry drying forecast: live 0–100 drying index, 3-day wash planner, common stain removal guide and ISO care symbol decoder. No signup.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "GBP"
+  }
+}</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the PegCast drying score mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is a 0–100 index for the daylight drying window — roughly one hour after sunrise to one hour before sunset. 75+ (green) is great for outdoor drying; 35–74 (orange) means slow but possible; below 35 (red) means use a tumble dryer, radiator or heated airer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What time of day should I hang washing outside?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hang out around 10am after the morning dew has gone and bring everything in before late afternoon. Evening dew and falling humidity can re-dampen dry clothes overnight."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I dry clothes outside in a UK winter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only on dry, calm, frost-free days, and even then drying is slow. Most winter washes are better on a heated airer, radiator or tumble dryer; check the score before risking the line."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does wind help clothes dry?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — a gentle breeze replaces the damp air around the fabric and speeds evaporation. Very strong gusts can damage items or cause peg marks, so secure bedding and long garments."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does humidity matter for drying?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Humid air holds little extra moisture, so water leaves the fabric slowly. Low humidity (under about 60%) dries well; high humidity (over 80%) usually means a slow, damp day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should washing dry in sun or shade?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whites, towels and bedding benefit from direct sun, which also brightens fabric. Dark colours, reds, denim and wool should dry in shade to prevent fading and stretching."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does washing take to dry outside?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "On a warm, dry, breezy day (75+) most items dry in about 2–4 hours. On an orange day it may take all day, and on a red day it will not dry outside at all. The Today tab shows an estimated drying time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is line drying cheaper than a tumble dryer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A tumble dryer cycle typically costs well over £1 in electricity, while outdoor drying uses none. On poor days a heated airer or dehumidifier usually costs less than a full tumble cycle."
+      }
+    }
+  ]
+}</script>
 </body>
 </html>
