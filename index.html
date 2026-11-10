@@ -122,7 +122,7 @@ body.dark .tab.active:active { background-color: #005bb5; }
   display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:14px;margin-bottom:8px;
   background:#ffffff;box-shadow:0 2px 8px rgba(0,0,0,.04);
   transition: transform .15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow .2s ease, background-color .2s ease;
-  cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  cursor:pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
 @media (hover: hover) and (pointer: fine) {
   .day-row:hover { background-color: #fcfcfc; } 
@@ -377,6 +377,14 @@ body.dark .peg-article h2,body.dark .peg-article h3,body.dark .peg-article stron
 body.dark .peg-tip{background:#2c2c2e}
 body.dark .peg-tip strong{color:#ffffff}
 body.dark .peg-a{color:#c7c7cc}
+
+/* === Mobile: remove cookie banner shadow === */
+@media (max-width: 480px) {
+  #cookieBanner,
+  body.dark #cookieBanner {
+    box-shadow: none !important;
+  }
+}
 </style>
 </head>
 <body>

@@ -71,6 +71,14 @@ body.dark .logo-sub{color:#94a3b8}
 .back-btn:hover{background:#f2f2f7}
 body.dark .back-btn{background:#1c1c1e;border-color:#38383a;color:#0A84FF}
 body.dark .back-btn:hover{background:#2c2c2e}
+
+/* === Mobile: remove cookie banner shadow (light + dark) === */
+@media (max-width: 480px) {
+  #cookieBanner,
+  body.dark #cookieBanner {
+    box-shadow: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -124,7 +132,7 @@ body.dark .back-btn:hover{background:#2c2c2e}
 </div>
 <div id="cookieBanner">
 <svg viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;margin:0 auto 8px;display:block"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-4-4 4 4 0 0 1 4-4 10 10 0 0 0-10-2z"/><circle cx="8.5" cy="8.5" r="1" fill="#007AFF" stroke="none"/><circle cx="15.5" cy="15.5" r="1" fill="#007AFF" stroke="none"/><circle cx="12" cy="12" r="1" fill="#007AFF" stroke="none"/><circle cx="11" cy="16.5" r="1" fill="#007AFF" stroke="none"/><circle cx="7" cy="14" r="1" fill="#007AFF" stroke="none"/></svg>
-<p>We use cookies to measure traffic and show relevant ads. You can accept or decline. See our <a href="cookies.html" style="color:#007AFF;font-weight:600">Cookie Policy</a>. Your settings are saved only in your browser.</p>
+<p>We use essential cookies to make this site work. With your consent we also use analytics cookies (Google Analytics) and advertising cookies (Google AdSense) to measure traffic and show relevant ads. You can accept or decline non-essential cookies. Read our <a href="cookies.html" style="color:#007AFF;font-weight:600">Cookie Policy</a>.</p>
 <div class="cookie-btns"><button id="acceptCookies">Accept</button><button id="declineCookies">Decline</button></div>
 </div>
 <script>
