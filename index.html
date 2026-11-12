@@ -642,7 +642,12 @@ var UKPLACES=[['London','London'],['Birmingham','West Midlands'],['Manchester','
 var lastDays=[];window.lastDays=[];
 function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
 
-function computeScore(temp, hum, wind, rainMm, dew, uv, cloud){
+// === ÚJ: Hőérzet (feelslike) figyelmeztetés a matekban ===
+function computeScore(temp, hum, wind, rainMm, dew, uv, cloud, feelslike){
+  // Ha a hőérzet (szélhűtés) 0.5°C alatt van, a víz megfagy, nem tud elpárologni -> 0 pont.
+  if (feelslike !== undefined && feelslike <= 0.5) {
+    return 0;
+  }
   var t = clamp((temp - 5) * 5, 0, 100);
   var h = clamp((100 - hum) * 1.67, 0, 100);
   var w = clamp(wind * 4, 0, 100);
@@ -713,7 +718,8 @@ function showDayDetail(idx){
   var hangStr = formatHour(dy.hangOutHour);
   var expl;
   
-  if (dy.temp < 2) {
+  // === ÚJ: Hőérzet alapú fagyás ellenőrzés ===
+  if (dy.feelslike <= 0.5) {
     expl = 'Risk of frost — clothes may freeze rather than dry. Use indoor drying.';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
     expl = 'Not enough daylight — laundry will not fully dry before sunset. Use indoor drying.';
@@ -771,7 +777,7 @@ async function check(query,label){
       var endH = Math.floor(ssH) - 1;
       if (endH <= startH) { startH = 10; endH = 15; }
       
-      var temps=[],hums=[],winds=[],rains=[],dews=[],uvs=[],clouds=[];
+      var temps=[],hums=[],winds=[],rains=[],dews=[],uvs=[],clouds=[],feels=[];
       for(var h=Math.max(0,startH);h<=Math.min(23,endH);h++){
         var hr=fday.hour[h];if(!hr)continue;
         temps.push(hr.temp_c);
@@ -781,6 +787,7 @@ async function check(query,label){
         dews.push(hr.dewpoint_c || hr.temp_c - (100 - hr.humidity) / 5);
         uvs.push(hr.uv || 0);
         clouds.push(hr.cloud || 0);
+        feels.push(hr.feelslike_c !== undefined ? hr.feelslike_c : hr.temp_c);
       }
       var avg=function(a){return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:0;};
       var rainSum=rains.reduce(function(x,y){return x+y;},0);
@@ -790,6 +797,7 @@ async function check(query,label){
       var avgDew = avg(dews);
       var avgUV = avg(uvs);
       var avgCloud = avg(clouds);
+      var avgFeels = avg(feels);
       
       var dryingHours = 6;
       if (avgTemp < 5) dryingHours += 3;
@@ -824,8 +832,9 @@ async function check(query,label){
       var notEnoughDaylight = (hangOutHour + dryingHours) > ssH;
       
       return {
-        score: computeScore(avgTemp, avgHum, avgWind, rainSum, avgDew, avgUV, avgCloud),
+        score: computeScore(avgTemp, avgHum, avgWind, rainSum, avgDew, avgUV, avgCloud, avgFeels),
         temp: avgTemp,
+        feelslike: avgFeels,
         hum: avgHum,
         wind: avgWind,
         rain: rainSum,
@@ -856,7 +865,7 @@ async function check(query,label){
     var hangStr = formatHour(today.hangOutHour);
     var tipText = v.tip;
     
-    if (today.temp < 2) {
+    if (today.feelslike <= 0.5) {
       tipText = 'Risk of frost — clothes may freeze rather than dry. Use indoor drying today.';
     } else if (today.notEnoughDaylight && today.score >= 35) {
       tipText = 'Not enough daylight today — laundry will not fully dry outside before sunset. Use indoor drying or a dehumidifier.';
@@ -1001,7 +1010,7 @@ function estimateDrying(){
     return;
   }
 
-  if (d.temp < 2) {
+  if (d.feelslike <= 0.5) {
     el.innerHTML = '<div style="font-size:1.15rem;font-weight:800;color:#ff3b30;margin-bottom:4px">Risk of frost</div><div style="font-size:.78rem;color:#8e8e93;margin-top:4px">Temperatures near freezing — clothes may freeze, not dry. Use indoor drying.</div>';
     return;
   }
@@ -1029,7 +1038,6 @@ document.getElementById('clearData').addEventListener('click',function(){
   }
 });
 
-// === ÚJ: Dinamikus .ics generálás ===
 function downloadICS(dy){
   var d=dy.date;
   var ymd=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
@@ -1042,7 +1050,7 @@ function downloadICS(dy){
   
   var eventDateStr = dayName(dy.date);
   var calDesc = 'Drying index ' + dy.score + '/100. ';
-  if (dy.temp < 2) {
+  if (dy.feelslike <= 0.5) {
     calDesc += 'Risk of frost - use indoor drying.';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
     calDesc += 'Not enough daylight to dry outside. Use indoor drying.';
@@ -1070,7 +1078,7 @@ function showPlannerDetail(idx){
   var hangTime = formatHour(dy.hangOutHour);
   var dryTime, expl;
   
-  if (dy.temp < 2) {
+  if (dy.feelslike <= 0.5) {
     dryTime = 'may not dry — risk of frost';
     expl = 'Risk of frost — clothes may freeze rather than dry. Use indoor drying.';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
@@ -1104,7 +1112,7 @@ function showPlannerDetail(idx){
   }
 
   var bullets = '';
-  var poorCondition = (dy.temp < 2) || (dy.notEnoughDaylight && dy.score >= 35);
+  var poorCondition = (dy.feelslike <= 0.5) || (dy.notEnoughDaylight && dy.score >= 35);
   
   if (dy.score >= 35 && !poorCondition) {
     bullets += '• <strong>Wash & hang out by:</strong> ' + hangTime + '<br>';
@@ -1123,10 +1131,9 @@ function showPlannerDetail(idx){
   var endH = startH + 1;
   var endTimeStr = String(endH).padStart(2,'0') + String(startM).padStart(2,'0') + '00';
   
-  // === ÚJ: Dinamikus Google Calendar link ===
   var eventDateStr = dayName(dy.date);
   var calDesc = 'Drying index ' + dy.score + '/100. ';
-  if (dy.temp < 2) {
+  if (dy.feelslike <= 0.5) {
     calDesc += 'Risk of frost - use indoor drying.';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
     calDesc += 'Not enough daylight to dry outside. Use indoor drying.';
