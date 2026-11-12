@@ -716,7 +716,7 @@ function showDayDetail(idx){
   if (dy.temp < 2) {
     expl = 'Risk of frost — clothes may freeze rather than dry. Use indoor drying.';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
-    expl = 'Not enough daylight — laundry may not fully dry before sunset. Hang out by ' + hangStr + ' or use indoor drying.';
+    expl = 'Not enough daylight — laundry will not fully dry before sunset. Use indoor drying.';
   } else if (dy.score >= 75) {
     expl = 'Great drying weather — warm, dry and breezy. Hang out by ' + hangStr + ' and laundry should be dry by early afternoon.';
   } else if (dy.score >= 35) {
@@ -859,7 +859,7 @@ async function check(query,label){
     if (today.temp < 2) {
       tipText = 'Risk of frost — clothes may freeze rather than dry. Use indoor drying today.';
     } else if (today.notEnoughDaylight && today.score >= 35) {
-      tipText = 'Not enough daylight today — laundry may not fully dry outside before sunset. Use indoor drying or a dehumidifier.';
+      tipText = 'Not enough daylight today — laundry will not fully dry outside before sunset. Use indoor drying or a dehumidifier.';
     } else if (today.score >= 75) {
       tipText = 'Perfect drying conditions. Hang out by ' + hangStr + ' and your clothes should dry in a few hours.';
     } else if (today.score >= 35) {
@@ -922,9 +922,15 @@ async function check(query,label){
     var hangStrBest = bestDay ? formatHour(bestDay.hangOutHour) : '10am';
     var bn=document.getElementById('bestDayNote');
     if(bn){
-      bn.innerHTML=bestOK
-        ?'Based on the 3-day forecast, <strong>'+(bestDay?dayName(bestDay.date):'—')+'</strong> is the best day to wash and dry outside. Wash in the morning, hang out by '+hangStrBest+', bring in before evening.'
-        :'<strong>All 3 days are poor for outdoor drying</strong> (all below 35/100). Use a tumble dryer, radiator or dehumidifier — the least-bad day is '+(bestDay?dayName(bestDay.date):'—')+'.';
+      if (bestOK) {
+        if (bestDay.notEnoughDaylight) {
+          bn.innerHTML = 'Based on the 3-day forecast, <strong>'+dayName(bestDay.date)+'</strong> has the highest score, but there is not enough daylight to dry laundry outside. Use indoor drying.';
+        } else {
+          bn.innerHTML = 'Based on the 3-day forecast, <strong>'+dayName(bestDay.date)+'</strong> is the best day to wash and dry outside. Wash in the morning, hang out by '+hangStrBest+', bring in before evening.';
+        }
+      } else {
+        bn.innerHTML = '<strong>All 3 days are poor for outdoor drying</strong> (all below 35/100). Use a tumble dryer, radiator or dehumidifier — the least-bad day is '+(bestDay?dayName(bestDay.date):'—')+'.';
+      }
     }
     document.getElementById('plannerEmpty').style.display='none';
     var pRows=document.getElementById('plannerRows');pRows.style.display='block';pRows.innerHTML='';
@@ -1052,7 +1058,7 @@ function showPlannerDetail(idx){
     expl = 'Risk of frost — clothes may freeze rather than dry. Use indoor drying.';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
     dryTime = 'may not fully dry before sunset';
-    expl = 'Not enough daylight — laundry may not fully dry before sunset. Hang out by ' + hangTime + ' or use indoor drying.';
+    expl = 'Not enough daylight — laundry will not fully dry before sunset. Use indoor drying instead.';
   } else if (dy.score >= 75) {
     dryTime = 'early afternoon (2–3pm)';
     expl = 'Great drying weather — warm, dry and breezy. Hang out by ' + hangTime + ' and laundry should be dry by early afternoon.';
