@@ -168,6 +168,15 @@ body.dark .stain-card:not(.expanded):hover { background-color: #323236; border-c
 .settings-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f2f2f7;font-size:.85rem;gap:10px;color:#1c1c1e}
 .settings-row:last-child{border-bottom:none}
 .settings-row input{width:90px;padding:8px 10px;border:1px solid #e5e5ea;border-radius:10px;font-size:.85rem}
+.settings-row .switch{position:relative;display:inline-block;width:50px;height:28px;flex-shrink:0}
+.settings-row .switch input{opacity:0;width:0;height:0;position:absolute;padding:0;border:none}
+.settings-row .switch .slider{position:absolute;cursor:pointer;inset:0;background:#e5e5ea;transition:.3s;border-radius:28px}
+.settings-row .switch .slider:before{content:"";position:absolute;height:22px;width:22px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.settings-row .switch input:checked+.slider{background:#007AFF}
+.settings-row .switch input:checked+.slider:before{transform:translateX(22px)}
+.settings-row .switch input:focus-visible+.slider{box-shadow:0 0 0 3px rgba(0,122,255,.3)}
+body.dark .settings-row .switch .slider{background:#3a3a3c}
+body.dark .settings-row .switch input:checked+.slider{background:#0A84FF}
 .notify-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 footer{margin-top:24px;text-align:center;font-size:.72rem;color:#8e8e93;padding-bottom:10px}
 footer a{color:#007AFF;font-weight:600}
@@ -378,7 +387,6 @@ body.dark .peg-a{color:#c7c7cc}
 <a href="index.html" class="logo"><span class="logo-top"><svg viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/><g fill="#9a3412" stroke="none"><circle cx="13.9" cy="12.7" r="1.1"/><circle cx="12.6" cy="14.0" r="0.85"/><circle cx="14.5" cy="14.2" r="0.45"/></g></svg>PegCast</span><span class="logo-sub">Peg Forecast</span></a>
 <h1>Should I dry my laundry outside today?</h1>
 <p class="sub">Your free all-in-one laundry assistant: live drying forecast, smart wash planner, stain removal tips, and a complete symbol decoder.</p>
-<button id="darkToggle" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
 </header>
 
 <div class="rain-alert" id="rainAlert">
@@ -622,6 +630,19 @@ body.dark .peg-a{color:#c7c7cc}
 
 <!-- SETTINGS PANEL -->
 <div class="panel" id="panel-settings">
+<div class="card">
+<h3>Appearance</h3>
+<div class="settings-row">
+<div>
+<div style="font-weight:600">Dark mode</div>
+<div style="font-size:.72rem;color:#8e8e93;margin-top:2px">Saved on this device and applied across PegCast pages.</div>
+</div>
+<label class="switch">
+<input type="checkbox" id="darkToggleSwitch" aria-label="Toggle dark mode">
+<span class="slider"></span>
+</label>
+</div>
+</div>
 <div class="card">
 <h3>Your settings (saved on this device)</h3>
 <div class="settings-row"><span>Saved locations</span><span id="locCount" style="font-size:.8rem;color:#64748b">0</span></div>
@@ -1367,14 +1388,13 @@ document.getElementById('acceptCookies').addEventListener('click',function(){set
 document.getElementById('declineCookies').addEventListener('click',function(){setConsent('denied');});
 var cs=document.getElementById('cookieSettings');if(cs)cs.addEventListener('click',function(e){e.preventDefault();banner.classList.add('show');});
 
-var darkBtn=document.getElementById('darkToggle');
-var sunSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
-var moonSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-function applyDark(on){document.body.classList.toggle('dark',on);if(darkBtn)darkBtn.innerHTML=on?sunSvg:moonSvg;localStorage.setItem('ld_dark',on?'1':'0');}
+var darkSwitch=document.getElementById('darkToggleSwitch');
+function applyDark(on){document.body.classList.toggle('dark',on);if(darkSwitch)darkSwitch.checked=on;localStorage.setItem('ld_dark',on?'1':'0');}
 var saved=localStorage.getItem('ld_dark');
 var darkOn=saved?(saved==='1'):(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
 applyDark(darkOn);
-if(darkBtn)darkBtn.addEventListener('click',function(){applyDark(!document.body.classList.contains('dark'));});
+if(darkSwitch)darkSwitch.addEventListener('change',function(){applyDark(darkSwitch.checked);});
+window.addEventListener('storage',function(e){if(e.key==='ld_dark'){var v=e.newValue==='1';document.body.classList.toggle('dark',v);if(darkSwitch)darkSwitch.checked=v;}});
 
 })();
 </script>

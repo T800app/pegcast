@@ -84,7 +84,6 @@ body.dark .back-btn:hover{background:#2c2c2e}
 <body>
 <div class="wrap">
 <header>
-<button id="darkToggle" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
 <a href="index.html" class="logo"><span class="logo-top"><svg viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/><g fill="#9a3412" stroke="none"><circle cx="13.9" cy="12.7" r="1.1"/><circle cx="12.6" cy="14.0" r="0.85"/><circle cx="14.5" cy="14.2" r="0.45"/></g></svg>PegCast</span><span class="logo-sub">Peg Forecast</span></a>
 <h1>Terms of Service</h1>
 <p class="sub">The rules of using PegCast — UK law</p>
@@ -128,9 +127,10 @@ body.dark .back-btn:hover{background:#2c2c2e}
 <script>
 (function(){
 document.getElementById('year').textContent=new Date().getFullYear();
-var dt=document.getElementById('darkToggle');
-if(localStorage.getItem('ld_dark')==='1')document.body.classList.add('dark');
-dt.addEventListener('click',function(){var d=document.body.classList.toggle('dark');localStorage.setItem('ld_dark',d?'1':'0');});
+var saved=localStorage.getItem('ld_dark');
+var darkOn=saved?(saved==='1'):(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+if(darkOn)document.body.classList.add('dark');
+window.addEventListener('storage',function(e){if(e.key==='ld_dark'){document.body.classList.toggle('dark',e.newValue==='1');}});
 var banner=document.getElementById('cookieBanner');
 if(!localStorage.getItem('cookieConsentLaundryDay'))banner.classList.add('show');
 function setConsent(g){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','update',{ad_storage:g,ad_user_data:g,ad_personalization:g,analytics_storage:g});localStorage.setItem('cookieConsentLaundryDay',g==='granted'?'1':'0');banner.classList.remove('show');}
