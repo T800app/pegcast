@@ -99,7 +99,7 @@ body.dark .tab.active:active { background-color: #005bb5; }
 
 .panel{display:none;animation:fadeUp .25s ease}
 .panel.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0}to{opacity:1}}
 .card{background:#ffffff;border-radius:18px;padding:clamp(18px,4vw,22px);box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:14px;word-wrap:break-word;overflow-wrap:break-word;}
 #loading,#error{display:none;text-align:center;padding:24px;color:#8e8e93;font-size:.9rem}
 #loading.show,#error.show{display:block}
@@ -435,6 +435,8 @@ body.dark .peg-a{color:#c7c7cc}
           <p><strong>Drying Index (0–100):</strong> Calculated using temperature, humidity, wind, dew point, UV index, cloud cover, and expected rain. 75+ is great, 35–74 is okay, below 35 is poor.</p>
           <p><strong>Current vs. Forecast:</strong> The top red banner and the "Current Weather (Now)" pill show <em>real-time conditions</em>. The drying time and the Next 3 Days list use the <em>daily summary forecast</em>.</p>
           <p><strong>Daily summary &amp; daylight:</strong> The "Daily summary" averages the conditions between sunrise and sunset. If the estimated drying time is longer than the remaining daylight, the app will warn you with <em>"Not enough daylight..."</em> — even if it looks sunny right now. <strong>It also checks the current time:</strong> if it's already dark outside, it will tell you so and suggest indoor drying. In winter, days are short, so slow-drying clothes won't finish before sunset.</p>
+          <p><strong>Late checks & warnings:</strong> PegCast calculates the latest ideal time to hang out your laundry based on how long it takes to dry and when the sun sets. If you check the app after this time (and the score is below 75), it will warn you with <em>"It is getting late..."</em> to let you know your clothes might not fully dry before sunset.</p>
+          <p><strong>Morning frost &amp; dew:</strong> On cold mornings the grass and line may be frosted even if the air feels warmer. PegCast detects if the night temperature dropped near freezing. It will warn you to wait until the frost has melted and the line is dry before hanging clothes, and it adds extra time to the drying estimate.</p>
           <p><strong>Rain Warnings:</strong> A red banner appears if rain, snow, or freezing rain is expected in the next 6 hours.</p>
         </div>
       </div>
@@ -535,6 +537,10 @@ body.dark .peg-a{color:#c7c7cc}
         <p class="peg-a">It is a 0–100 index for the daylight drying window — roughly one hour after sunrise to one hour before sunset. 75+ (green) is great for outdoor drying; 35–74 (orange) means slow but possible; below 35 (red) means use a tumble dryer, radiator or heated airer.</p>
         <div class="peg-q">What time of day should I hang washing outside?</div>
         <p class="peg-a">Hang out after the morning dew has gone — the Today tab calculates the best time from sunrise, drying speed and sunset, so it shifts with the seasons. Bring everything in before late afternoon; evening dew and falling humidity can re-dampen dry clothes overnight.</p>
+        <div class="peg-q">Why does it say "It is getting late"?</div>
+        <p class="peg-a">PegCast calculates the ideal latest hanging time by subtracting the estimated drying hours from the sunset time. If you check the app after this hour, and the drying score is under 75 (slow drying), it warns you that your laundry may not finish drying before the sun goes down. In this case, indoor drying is recommended.</p>
+        <div class="peg-q">What if there is frost or dew on the grass in the morning?</div>
+        <p class="peg-a">PegCast checks the overnight minimum temperature. If it was near or below freezing, the app assumes morning frost or heavy dew. It will advise you to wait until the line and grass are dry before hanging out your laundry, and it automatically adds extra time to the estimated drying time.</p>
         <div class="peg-q">Can I dry clothes outside in a UK winter?</div>
         <p class="peg-a">Only on dry, calm, frost-free days, and even then drying is slow. Most winter washes are better on a heated airer, radiator or tumble dryer; check the score before risking the line.</p>
         <div class="peg-q">Does wind help clothes dry?</div>
@@ -569,9 +575,9 @@ body.dark .peg-a{color:#c7c7cc}
 
 </div>
 <div class="factors">
-<div class="factor"><div class="v" id="fTemp">—</div><div class="l">Temperature</div></div>
-<div class="factor"><div class="v" id="fHum">—</div><div class="l">Humidity</div></div>
-<div class="factor"><div class="v" id="fWind">—</div><div class="l">Wind</div></div>
+<div class="factor"><div class="v" id="fTemp">—</div><div class="l">Temperature (day)</div></div>
+<div class="factor"><div class="v" id="fHum">—</div><div class="l">Humidity (day)</div></div>
+<div class="factor"><div class="v" id="fWind">—</div><div class="l">Wind (day)</div></div>
 <div class="factor"><div class="v" id="fRain">—</div><div class="l">Precip (day)</div></div>
 <div class="factor"><div class="v" id="fPrecip">—</div><div class="l">Current Weather (Now)</div></div>
 </div>
@@ -768,6 +774,8 @@ function showDayDetail(idx){
     else expl = 'Poor for outdoor drying — too cold, humid or calm. Laundry is unlikely to dry outside; use a tumble dryer, radiator or dehumidifier.';
   }
 
+  var frostNote = dy.morningFrost ? ' <strong>Note:</strong> Morning frost/dew detected (min ' + dy.minTemp.toFixed(1) + '°C). Wait for the frost to clear before hanging out.' : '';
+
   var bestNote=isBest?(dy.score>=35?' This is the best day of the next 3.':' This is the best of the next 3 days, but still poor for drying outside.'):'';
   var _dc=dy.cond||'—';var _dw=isWet;var _dp=Math.max(dy.cr||0,dy.cs||0);
   var precipStr='';
@@ -782,7 +790,7 @@ function showDayDetail(idx){
   el.style.display='block';
   el.innerHTML='<div class="dd-title" style="color:'+bandColor+'">'+dayName(dy.date)+' — '+dy.score+'/100 ('+band+') <span style="font-size:.7rem;font-weight:normal;opacity:.7">(Daily summary)</span></div>'
     +'<div class="dd-stats">'+dy.temp.toFixed(1)+'\u00b0C \u00b7 '+Math.round(dy.hum)+'% humidity \u00b7 '+Math.round(dy.wind/1.60934)+' mph wind \u00b7 '+precipStr+'</div>'
-    +'<p class="dd-text">'+expl+bestNote+'</p>';
+    +'<p class="dd-text">'+expl+frostNote+bestNote+'</p>';
 }
 
 async function check(query,label){
@@ -835,6 +843,9 @@ async function check(query,label){
       var avgCloud = avg(clouds);
       var avgFeels = avg(feels);
       
+      var minTemp = fday.day.mintemp_c || avgTemp;
+      var morningFrost = (minTemp <= 2);
+
       var dryingHours = 6;
       if (avgTemp < 5) dryingHours += 3;
       else if (avgTemp < 10) dryingHours += 2;
@@ -854,10 +865,14 @@ async function check(query,label){
       else if (avgDew < 5) dryingHours -= 1;
       
       if (avgUV > 3 && avgCloud < 50) dryingHours -= 1.5;
+
+      if (morningFrost) dryingHours += 1.5;
       
       dryingHours = Math.max(2, Math.min(14, dryingHours));
       
       var hangOutHour = Math.max(Math.ceil(srH) + 1, 7);
+      if (morningFrost) hangOutHour = Math.max(hangOutHour, 10);
+      
       var maxHangOut = Math.floor(ssH) - dryingHours;
       if (hangOutHour > maxHangOut && maxHangOut >= Math.ceil(srH) + 0.5) {
         hangOutHour = Math.max(Math.ceil(srH) + 0.5, maxHangOut);
@@ -885,6 +900,8 @@ async function check(query,label){
         cond: (fday.day.condition && fday.day.condition.text) || '—',
         cr: (fday.day.daily_chance_of_rain || 0),
         cs: (fday.day.daily_chance_of_snow || 0),
+        minTemp: minTemp,
+        morningFrost: morningFrost,
         date: new Date(fday.date + 'T12:00:00'),
         hours: fday.hour
       };
@@ -922,6 +939,10 @@ async function check(query,label){
       tipText = 'Not worth hanging outside today. Use a tumble dryer, radiator or indoor rack with a dehumidifier.';
     }
 
+    if (today.morningFrost && !isDark) {
+      tipText = '⚠️ Morning frost/dew detected (min ' + today.minTemp.toFixed(1) + '°C). Wait for the frost to clear before hanging out. ' + tipText;
+    }
+
     if (today.score < 35 && todayIsWet) {
         tipText = 'Poor for outdoor drying — ' + today.cond.toLowerCase() + ' expected. Use a tumble dryer, radiator or indoor rack.';
     }
@@ -938,7 +959,11 @@ async function check(query,label){
     var _cond=(d.current&&d.current.condition&&d.current.condition.text)||(_d0.condition&&_d0.condition.text)||'—';
     var _pel=document.getElementById('fPrecip');
     var _wet=/rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(_cond);
-    if(_pel)_pel.textContent=_wet?_pct+'% · '+_cond:_cond;
+    var _curTemp = (d.current && d.current.temp_c !== undefined) ? d.current.temp_c.toFixed(1) + '°C' : '';
+    if(_pel){
+      var _txt = _wet ? _pct+'% · '+_cond : _cond;
+      _pel.textContent = _curTemp ? _curTemp + ' · ' + _txt : _txt;
+    }
     
     var rainSoon=false;var curHour=new Date().getHours();
     var alertCond = _cond;
@@ -1079,7 +1104,13 @@ function estimateDrying(){
   }
   
   var msg = h >= 10 ? 'Will dry very slowly — may not be fully dry by evening' : 'Hang out in the morning, bring in before evening';
-  el.innerHTML='<div style="font-size:1.5rem;font-weight:800;color:#007AFF;line-height:1.1">'+lo+'–'+hi+' hours</div><div style="font-size:.74rem;color:#8e8e93;margin-top:6px">'+msg+'</div>';
+  var frostWarning = d.morningFrost ? '<div style="font-size:.78rem;color:#ff9f0a;margin-top:4px;font-weight:600">⚠️ Morning frost/dew detected — wait for the line to dry.</div>' : '';
+  
+  if (d.morningFrost) {
+      msg = 'Wait for the frost to clear before hanging out.';
+  }
+
+  el.innerHTML='<div style="font-size:1.5rem;font-weight:800;color:#007AFF;line-height:1.1">'+lo+'–'+hi+' hours</div><div style="font-size:.74rem;color:#8e8e93;margin-top:6px">'+msg+'</div>'+frostWarning;
 }
 renderStains();estimateDrying();
 
@@ -1107,6 +1138,8 @@ function downloadICS(dy){
   var calDesc = 'Drying index ' + dy.score + '/100. ';
   if (dy.feelslike <= 0.5) {
     calDesc += 'Risk of frost - use indoor drying.';
+  } else if (dy.morningFrost) {
+    calDesc += 'Morning frost detected. Wait for line to dry. ';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
     calDesc += 'Not enough daylight to dry outside. Use indoor drying.';
   } else if (dy.score >= 75) {
@@ -1202,6 +1235,10 @@ function showPlannerDetail(idx){
     bullets += '• <strong>Outdoor drying:</strong> Not recommended today.<br>';
     bullets += '• <strong>Use instead:</strong> Tumble dryer, indoor rack or dehumidifier.<br>';
   }
+  
+  if (dy.morningFrost) {
+    bullets += '• <strong style="color:#ff9f0a">⚠️ Morning frost/dew:</strong> Min ' + dy.minTemp.toFixed(1) + '°C. Wait for the frost to clear before hanging out.<br>';
+  }
   bullets += '• ' + rainNote;
 
   var d=dy.date;var ymd=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
@@ -1215,6 +1252,8 @@ function showPlannerDetail(idx){
   var calDesc = 'Drying index ' + dy.score + '/100. ';
   if (dy.feelslike <= 0.5) {
     calDesc += 'Risk of frost - use indoor drying.';
+  } else if (dy.morningFrost) {
+    calDesc += 'Morning frost detected. Wait for line to dry. ';
   } else if (dy.notEnoughDaylight && dy.score >= 35) {
     calDesc += 'Not enough daylight to dry outside. Use indoor drying.';
   } else if (dy.score >= 75) {
@@ -1439,6 +1478,22 @@ window.addEventListener('storage',function(e){if(e.key==='ld_dark'){var v=e.newV
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "PegCast is time-aware. If the current time is before sunrise or after sunset, the app will clearly state 'It is currently dark outside' and advise you to use indoor drying or check tomorrow's forecast, as outdoor drying won't work in the dark."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if there is frost or dew on the grass in the morning?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PegCast checks the overnight minimum temperature. If it was near or below freezing, the app assumes morning frost or heavy dew. It will advise you to wait until the line and grass are dry before hanging out your laundry, and it automatically adds extra time to the estimated drying time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does it say 'It is getting late'?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PegCast calculates the ideal latest hanging time by subtracting the estimated drying hours from the sunset time. If you check the app after this hour, and the drying score is under 75 (slow drying), it warns you that your laundry may not finish drying before the sun goes down. In this case, indoor drying is recommended."
       }
     },
     {
