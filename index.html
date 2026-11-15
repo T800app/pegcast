@@ -379,6 +379,27 @@ body.dark .peg-a{color:#c7c7cc}
     box-shadow: none !important;
   }
 }
+/* === Reszponzív finomhangolás: mobil / tablet / PC (az elrendezés és színek változatlanok) === */
+body{overflow-x:hidden}
+img,svg{max-width:100%}
+.rain-alert{flex-wrap:wrap}
+@media (min-width:600px){
+  .wrap{max-width:760px}
+  .day-row{padding:14px 16px}
+  .factors .factor{font-size:.82rem;padding:8px 16px}
+  .rain-alert{font-size:.9rem;padding:14px 18px}
+}
+@media (min-width:1024px){
+  .wrap{max-width:800px}
+}
+@media (hover:none) and (pointer:coarse){
+  .btn,.tab,.sym-filter,.loc-chip,.cal-apple{min-height:40px}
+}
+@media (max-width:380px){
+  .rain-alert{font-size:.82rem;padding:12px 14px}
+  .factors{gap:6px}
+  .factor{font-size:.74rem;padding:6px 12px}
+}
 </style>
 </head>
 <body>
@@ -697,6 +718,61 @@ function verdict(s){
 function dayName(d){return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
 function barColor(s){return s>=75?'#34c759':s>=35?'#ff9f0a':'#ff3b30';}function tagStyle(s){var bg=s>=75?'rgba(52,199,89,.12)':s>=35?'rgba(255,159,10,.13)':'rgba(255,59,48,.10)';return 'background:'+bg+';color:'+barColor(s)+';';}
 function escapeHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+// === Csapadék címke keverés: típus a condition.code-ból, intenzitás a mm-ből (UK küszöbök) ===
+var WAPI_FAM={
+  drizzle:[1072,1150,1153,1168,1171],
+  rain:[1063,1087,1180,1183,1186,1189,1192,1195,1198,1201,1273,1276],
+  shower:[1240,1243,1246],
+  sleet:[1069,1204,1207,1249,1252],
+  snow:[1066,1114,1117,1210,1213,1216,1219,1222,1225,1255,1258,1279,1282],
+  ice:[1237,1261,1264],
+  fog:[1030,1135,1147]
+};
+var WAPI_HEAVY=[1171,1192,1195,1201,1207,1117,1222,1225,1246,1252,1258,1264,1276,1282];
+var WAPI_MOD=[1186,1189,1216,1219,1243,1252,1264];
+var WAPI_LIGHT=[1063,1066,1069,1072,1087,1150,1153,1180,1183,1198,1204,1210,1213,1240,1249,1255,1261,1273,1279];
+var WAPI_PATCHY=[1063,1066,1069,1072,1087,1273,1279];
+var WAPI_FREEZING=[1168,1171,1198,1201,1147];
+function wapiFamily(code){code=+code||0;for(var f in WAPI_FAM){if(WAPI_FAM[f].indexOf(code)>=0)return f;}return '';}
+function wapiMmTier(mm,perDay){
+  mm=+mm||0;
+  if(mm<=0.001)return '';
+  if(perDay){if(mm>=7)return 'heavy';if(mm>=2)return 'moderate';if(mm>=0.5)return 'light';return 'trace';}
+  if(mm>=4)return 'heavy';if(mm>=0.5)return 'moderate';if(mm>=0.1)return 'light';return 'trace';
+}
+function precipLabel(code,text,mm,chance,perDay){
+  code=+code||0;chance=+chance||0;mm=+mm||0;
+  var fam=wapiFamily(code);
+  if(!fam){
+    var mmTierFallback=wapiMmTier(mm,perDay);
+    if(mmTierFallback==='light'||mmTierFallback==='moderate'||mmTierFallback==='heavy'){fam='rain';}
+    else return{label:(text||'—'),family:'',intensity:'',wet:false,mm:mm,chance:chance};
+  }
+  var rank={trace:1,light:2,moderate:3,heavy:4};
+  var codeTier=WAPI_HEAVY.indexOf(code)>=0?'heavy':(WAPI_MOD.indexOf(code)>=0?'moderate':(WAPI_LIGHT.indexOf(code)>=0?'light':''));
+  var mmTier=wapiMmTier(mm,perDay);
+  var intensity=(rank[codeTier]||0)>(rank[mmTier]||0)?codeTier:mmTier;
+  if(fam==='drizzle'&&intensity==='heavy')intensity='moderate';
+  var words={rain:'rain',shower:'rain shower',drizzle:'drizzle',snow:'snow',sleet:'sleet',ice:'ice pellets',fog:'fog'};
+  var freezeWords={rain:'freezing rain',drizzle:'freezing drizzle'};
+  var famWord=words[fam]||'precipitation';
+  var freezing=WAPI_FREEZING.indexOf(code)>=0;
+  var famLabel=freezing?(freezeWords[fam]||famWord):famWord;
+  var wet=(fam!=='fog');
+  var label;
+  if(WAPI_PATCHY.indexOf(code)>=0&&mm<0.1){
+    label=chance>=30?chance+'% chance of '+famLabel:famLabel+' possible';
+    wet=wet&&(chance>=30);
+  }else if(!intensity){
+    label=famLabel.charAt(0).toUpperCase()+famLabel.slice(1);
+  }else if(intensity==='trace'){
+    label='Light '+famLabel+' (trace)';
+  }else{
+    var iw=intensity.charAt(0).toUpperCase()+intensity.slice(1);
+    label=iw+' '+famLabel;
+  }
+  return{label:label,family:fam,intensity:intensity,wet:wet,mm:mm,chance:chance};
+}
 
 function formatHour(h) {
   if (h === undefined || isNaN(h)) return '10am';
@@ -746,7 +822,7 @@ function showDayDetail(idx){
   var sh=document.body.classList.contains('dark')?'0 4px 12px rgba(0,0,0,.6)':'0 2px 8px rgba(0,0,0,.06)';
   document.querySelectorAll('#forecastRows .day-row').forEach(function(r,i){r.style.boxShadow=i===idx?'0 0 0 2.5px '+bandColor+','+sh:'';});
   
-  var isWet = /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond);
+  var isWet = (dy.dayLabel ? dy.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond));
   var hangStr = formatHour(dy.hangOutHour);
   var expl;
   
@@ -770,14 +846,14 @@ function showDayDetail(idx){
   } else if (dy.score >= 35) {
     expl = 'OK but slow — it may take all day to dry. Hang out by ' + hangStr + ' and bring in before evening.';
   } else {
-    if (isWet) expl = 'Poor for outdoor drying — ' + dy.cond.toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
+    if (isWet) expl = 'Poor for outdoor drying — ' + ((dy.dayLabel && dy.dayLabel.label) || dy.cond).toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
     else expl = 'Poor for outdoor drying — too cold, humid or calm. Laundry is unlikely to dry outside; use a tumble dryer, radiator or dehumidifier.';
   }
 
   var frostNote = dy.morningFrost ? ' <strong>Note:</strong> Morning frost/dew detected (min ' + dy.minTemp.toFixed(1) + '°C). Wait for the frost to clear before hanging out.' : '';
 
   var bestNote=isBest?(dy.score>=35?' This is the best day of the next 3.':' This is the best of the next 3 days, but still poor for drying outside.'):'';
-  var _dc=dy.cond||'—';var _dw=isWet;var _dp=Math.max(dy.cr||0,dy.cs||0);
+  var _dc=(dy.dayLabel&&dy.dayLabel.label)||dy.cond||'—';var _dw=isWet;var _dp=Math.max(dy.cr||0,dy.cs||0);
   var precipStr='';
   if(dy.rain > 0){
     precipStr = dy.rain.toFixed(1) + ' mm' + (_dp > 0 ? ' (' + _dp + '% chance)' : '') + ' · ' + _dc;
@@ -801,7 +877,8 @@ async function check(query,label){
     var cacheKey='lwapi2_'+query.replace(/[^a-z0-9]/gi,'_');
     var cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
     var d;
-    if(cached && (Date.now()-cached.ts)<3600000){d=cached.data;}
+    // Böngészői gyorsítótár 30 perc; a Worker HIT ingyenes (nem hívja meg a WeatherAPI-t), így a frissebb adat nem növeli a kvótát
+    if(cached && (Date.now()-cached.ts)<1800000){d=cached.data;}
     else{
       var q=query.trim().replace(/airport/gi,"").replace(/\s+/g," ").trim();var _ukCtry=/\b(wales|scotland|england|northern ireland)\b/i.test(q);if((!/\s/.test(q)||_ukCtry)&&!/united kingdom|\buk\b/i.test(q)&&!/^[0-9.-]+,\s*[0-9.-]+$/.test(q)&&!/^[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}$/i.test(q)){q=q+', United Kingdom';}
       var url=WORKER_URL.replace(/\/+$/,'')+'?q='+encodeURIComponent(q);
@@ -822,6 +899,7 @@ async function check(query,label){
       if (endH <= startH) { startH = 10; endH = 15; }
       
       var temps=[],hums=[],winds=[],rains=[],dews=[],uvs=[],clouds=[],feels=[];
+      var peakMm=0,peakCode=0,peakText='',peakHour=-1;
       for(var h=Math.max(0,startH);h<=Math.min(23,endH);h++){
         var hr=fday.hour[h];if(!hr)continue;
         temps.push(hr.temp_c);
@@ -832,6 +910,7 @@ async function check(query,label){
         uvs.push(hr.uv || 0);
         clouds.push(hr.cloud || 0);
         feels.push(hr.feelslike_c !== undefined ? hr.feelslike_c : hr.temp_c);
+        if(+(hr.precip_mm||0)>peakMm){peakMm=+hr.precip_mm;peakCode=(hr.condition&&hr.condition.code)||0;peakText=(hr.condition&&hr.condition.text)||'';peakHour=h;}
       }
       var avg=function(a){return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:0;};
       var rainSum=rains.reduce(function(x,y){return x+y;},0);
@@ -898,6 +977,9 @@ async function check(query,label){
         sunrise: srH,
         sunset: ssH,
         cond: (fday.day.condition && fday.day.condition.text) || '—',
+        code: (fday.day.condition && fday.day.condition.code) || 0,
+        dayLabel: precipLabel((fday.day.condition && fday.day.condition.code) || 0, (fday.day.condition && fday.day.condition.text) || '', (fday.day.totalprecip_mm || 0), (fday.day.daily_chance_of_rain || 0), true),
+        peak: {mm: peakMm, code: peakCode, text: peakText, hour: peakHour},
         cr: (fday.day.daily_chance_of_rain || 0),
         cs: (fday.day.daily_chance_of_snow || 0),
         minTemp: minTemp,
@@ -914,7 +996,7 @@ async function check(query,label){
     var v=verdict(today.score);
     var ve=document.getElementById('scoreVerdict');ve.textContent=v.text;ve.className='score-verdict '+v.cls;
     
-    var todayIsWet = /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(today.cond);
+    var todayIsWet = (today.dayLabel ? today.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(today.cond));
     var hangStr = formatHour(today.hangOutHour);
     var tipText = v.tip;
     
@@ -944,7 +1026,7 @@ async function check(query,label){
     }
 
     if (today.score < 35 && todayIsWet) {
-        tipText = 'Poor for outdoor drying — ' + today.cond.toLowerCase() + ' expected. Use a tumble dryer, radiator or indoor rack.';
+        tipText = 'Poor for outdoor drying — ' + ((today.dayLabel && today.dayLabel.label) || today.cond).toLowerCase() + ' expected. Use a tumble dryer, radiator or indoor rack.';
     }
     document.getElementById('scoreTip').textContent = tipText;
 
@@ -956,34 +1038,40 @@ async function check(query,label){
     var _d0=fd[0].day;
     var _cr=_d0.daily_chance_of_rain||0,_cs=_d0.daily_chance_of_snow||0;
     var _pct=Math.max(_cr,_cs);
-    var _cond=(d.current&&d.current.condition&&d.current.condition.text)||(_d0.condition&&_d0.condition.text)||'—';
+    var _cCond=(d.current&&d.current.condition)||{};
+    var curLab=precipLabel(_cCond.code,_cCond.text,d.current?d.current.precip_mm:0,null,false);
     var _pel=document.getElementById('fPrecip');
-    var _wet=/rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(_cond);
+    var _wet=curLab.wet;
     var _curTemp = (d.current && d.current.temp_c !== undefined) ? d.current.temp_c.toFixed(1) + '°C' : '';
     if(_pel){
-      var _txt = _wet ? _pct+'% · '+_cond : _cond;
+      var _txt = _wet ? curLab.label + (_pct>0?' · '+_pct+'% chance':'') : curLab.label;
       _pel.textContent = _curTemp ? _curTemp + ' · ' + _txt : _txt;
     }
-    
-    var rainSoon=false;var curHour=new Date().getHours();
-    var alertCond = _cond;
-    for(var h2=0;h2<6;h2++){
-      var idx=curHour+h2;
-      if(idx<24 && today.hours[idx] && today.hours[idx].precip_mm>0.2){
-        rainSoon=true;
-        if(!/rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(today.cond)){
-            alertCond = today.hours[idx].condition.text;
+
+    var curHour=new Date().getHours();
+    var bannerMsg='';
+    if(curLab.wet){
+      bannerMsg='Now: '+curLab.label.charAt(0).toUpperCase()+curLab.label.slice(1)+' — hang laundry indoors.';
+    }else{
+      for(var h2=0;h2<3;h2++){
+        var idx=curHour+h2;
+        if(idx<24 && today.hours[idx]){
+          var _hr=today.hours[idx];
+          var _hl=precipLabel((_hr.condition&&_hr.condition.code)||0,(_hr.condition&&_hr.condition.text)||'',_hr.precip_mm,_hr.chance_of_rain,false);
+          if(_hl.wet && (+_hr.precip_mm>0.2 || (+_hr.chance_of_rain||0)>=60)){
+            bannerMsg=((+_hr.chance_of_rain||0)>=60?'Likely ':'')+_hl.label.charAt(0).toUpperCase()+_hl.label.slice(1)+' around '+formatHour(idx)+' — hang laundry indoors.';
+            break;
+          }
         }
-        break;
       }
+    }
+    if(!bannerMsg && today.rain>1 && today.dayLabel && today.dayLabel.wet){
+      bannerMsg=today.dayLabel.label.charAt(0).toUpperCase()+today.dayLabel.label.slice(1)+' expected today — indoor drying advised.';
     }
 
     var _raEl=document.getElementById('rainAlertText');
-    if(_raEl){
-      _raEl.textContent = 'Current: ' + alertCond.charAt(0).toUpperCase() + alertCond.slice(1) + ' expected soon — hang laundry indoors.';
-    }
-
-    if(rainSoon||today.rain>1){document.getElementById('rainAlert').classList.add('show');}else{document.getElementById('rainAlert').classList.remove('show');}
+    if(_raEl){_raEl.textContent=bannerMsg;}
+    document.getElementById('rainAlert').classList.toggle('show', !!bannerMsg);
     var best=Math.max.apply(null,days.map(function(x){return x.score;}));var bestOK=best>=35;
     var rows=document.getElementById('forecastRows');rows.innerHTML='';document.getElementById('dayDetail').style.display='none';
     days.forEach(function(dy,idx){
@@ -1082,10 +1170,12 @@ function estimateDrying(){
     return;
   }
 
-  var isWet = /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(d.cond);
+  var isWet = (d.dayLabel ? d.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(d.cond));
 
   if(isWet || d.rain>0.2){
-    el.innerHTML='<div style="font-size:1.15rem;font-weight:800;color:#ff3b30;margin-bottom:4px">'+d.cond+' expected</div><div style="font-size:.78rem;color:#8e8e93;margin-top:4px">It will not dry outside today — use a tumble dryer, dehumidifier or radiator.</div>';
+    var _dl=d.dayLabel||precipLabel(d.code||0,d.cond||'',d.rain,0,true);
+    var _mmLine=d.rain>0?(' · '+d.rain.toFixed(1)+' mm daytime rain'):'';
+    el.innerHTML='<div style="font-size:1.15rem;font-weight:800;color:#ff3b30;margin-bottom:4px">'+_dl.label.charAt(0).toUpperCase()+_dl.label.slice(1)+' expected</div><div style="font-size:.78rem;color:#8e8e93;margin-top:4px">It will not dry outside today — use a tumble dryer, dehumidifier or radiator.'+_mmLine+'</div>';
     return;
   }
 
@@ -1192,8 +1282,8 @@ function showPlannerDetail(idx){
     expl = 'OK but slow — it may take all day to dry. Hang out by ' + hangTime + ' and bring in before evening.';
   } else {
     dryTime = 'may not fully dry — use indoor';
-    var isWet = /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond);
-    if (isWet) expl = 'Poor for outdoor drying — ' + dy.cond.toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
+    var isWet = (dy.dayLabel ? dy.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond));
+    if (isWet) expl = 'Poor for outdoor drying — ' + ((dy.dayLabel && dy.dayLabel.label) || dy.cond).toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
     else expl = 'Poor for outdoor drying — too cold, humid or calm. Laundry is unlikely to dry outside; use a tumble dryer, radiator or dehumidifier.';
   }
   
@@ -1202,11 +1292,12 @@ function showPlannerDetail(idx){
   
   var rainNote = '';
   var rainAmt = dy.rain >= 0.1 ? ' (' + dy.rain.toFixed(1) + 'mm)' : '';
-  var isWet2 = /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond);
+  var isWet2 = (dy.dayLabel ? dy.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond));
+  var _dyLabel=(dy.dayLabel&&dy.dayLabel.label)||dy.cond||'Precipitation';
   if (dy.rain >= 0.5 || (isWet2 && dy.rain < 0.1)) {
-      rainNote = '<strong style="color:#ff3b30">' + dy.cond + rainAmt + '.</strong>';
+      rainNote = '<strong style="color:#ff3b30">' + _dyLabel + rainAmt + '.</strong>';
   } else if (dy.rain >= 0.1) {
-      rainNote = '<strong style="color:#007AFF">' + dy.cond + rainAmt + '.</strong>';
+      rainNote = '<strong style="color:#007AFF">' + _dyLabel + rainAmt + '.</strong>';
   } else {
       rainNote = 'No significant precipitation expected.';
   }
