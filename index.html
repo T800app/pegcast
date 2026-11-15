@@ -15,11 +15,6 @@
 <meta name="twitter:title" content="PegCast · Peg Forecast — Should I dry my laundry outside? Live drying index, stain advice &amp; planner">
 <meta name="twitter:description" content="PegCast · Peg Forecast — Should you hang your laundry outside today? Live laundry drying index, wash planner, common stain removal advice and laundry symbol decoder. Free, no signup.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='5' fill='%23007AFF'/><path d='M16 3l-4 2.5L8 3 3 6l2.5 3.5L8 8v13h8V8l2.5 1.5L21 6z' fill='white'/><circle cx='13.9' cy='12.7' r='1.0' fill='%239a3412'/><circle cx='12.6' cy='14.0' r='0.8' fill='%239a3412'/><circle cx='14.5' cy='14.2' r='0.45' fill='%239a3412'/></svg>">
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});</script>
-<script>if(localStorage.getItem('cookieConsentLaundryDay')==='1'){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});}</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-SR0W82QKHP"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-SR0W82QKHP');</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6363136655011505" crossorigin="anonymous"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 ::selection{background:rgba(0,122,255,.15);color:#007AFF}
@@ -180,16 +175,7 @@ body.dark .settings-row .switch input:checked+.slider{background:#0A84FF}
 .notify-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 footer{margin-top:24px;text-align:center;font-size:.72rem;color:#8e8e93;padding-bottom:10px}
 footer a{color:#007AFF;font-weight:600}
-#cookieBanner{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);max-width:520px;width:calc(100% - 24px);background:#ffffff;border-radius:18px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:9998;display:none;text-align:center}
-#cookieBanner.show{display:block;animation:bannerIn .3s ease}
-@keyframes bannerIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-#cookieBanner p{font-size:.8rem;color:#3a3a3c;margin-bottom:12px;line-height:1.5}
-.cookie-btns{display:flex;flex-direction:column;gap:8px}
-.cookie-btns button{width:100%;padding:11px 14px;border-radius:12px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;transition:.15s}
-#acceptCookies{background:#007AFF;color:white}
-#acceptCookies:hover{background:#0066d6}
-#declineCookies{background:#f2f2f7;color:#007AFF;font-weight:600}
-#declineCookies:hover{background:#e9e9eb}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .svg-ic{width:16px;height:16px;flex-shrink:0;vertical-align:middle;margin-right:5px}
 .sym-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .sym-filter{padding:7px 14px;border:1px solid #e5e5ea;background:#fff;color:#3a3a3c;border-radius:99px;font-size:.74rem;font-weight:600;cursor:pointer;transition:.15s; outline: none; box-shadow: none; -webkit-tap-highlight-color: transparent;}
@@ -231,12 +217,12 @@ header{position:relative}
 #darkToggle:hover{transform:scale(1.08)}
 #darkToggle svg{width:18px;height:18px}
 body.dark{background:#000000;color:#f2f2f7}
-body.dark .card,body.dark .score-card,body.dark #cookieBanner{background:#1c1c1e;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+body.dark .card,body.dark .score-card{background:#1c1c1e;box-shadow:0 2px 10px rgba(0,0,0,.4)}
 body.dark h1,body.dark h3,body.dark .score-num,body.dark .day-name,body.dark .day-score,body.dark .factor .v,body.dark .guide-card .name,body.dark .settings-row,body.dark .sym-name,body.dark .logo{color:#ffffff}
-body.dark .sub,body.dark footer,body.dark .score-label,body.dark .score-tip,body.dark .factor .l,body.dark .suffix,body.dark .sym-desc,body.dark .sym-hint,body.dark .guide-card .wears,body.dark #cookieBanner p{color:#8e8e93}
+body.dark .sub,body.dark footer,body.dark .score-label,body.dark .score-tip,body.dark .factor .l,body.dark .suffix,body.dark .sym-desc,body.dark .sym-hint,body.dark .guide-card .wears{color:#8e8e93}
 body.dark .sym-card.expanded .sym-desc,body.dark .sym-detail{color:#c7c7cc}
-body.dark .btn-primary,body.dark #acceptCookies,body.dark .sym-filter.active{background:#0A84FF}
-body.dark .btn-primary:hover,body.dark #acceptCookies:hover{background:#0066d6}
+body.dark .btn-primary,body.dark .sym-filter.active{background:#0A84FF}
+body.dark .btn-primary:hover{background:#0066d6}
 body.dark .btn-ghost,body.dark .cal-apple,body.dark .loc-chip{background:#1c1c1e;border-color:#3a3a3c;color:#0A84FF}
 body.dark .btn-ghost:hover { background: #3a3a3c; }
 
@@ -247,7 +233,7 @@ body.dark .sym-filter.active{background:#0A84FF;color:#ffffff;border-color:trans
 body.dark .search-row input,body.dark .settings-row input{background:#2c2c2e;border-color:#3a3a3c;color:#fff}
 body.dark #autocomplete{background:#1c1c1e;border-color:#38383a}body.dark .ac-item{color:#f2f2f7;border-bottom-color:#2c2c2e}body.dark .ac-item:hover{background:#2c2c2e}
 body.dark .search-row input:focus{border-color:#0A84FF;box-shadow:0 0 0 3px rgba(10,132,255,.25)}
-body.dark .factor,body.dark #declineCookies{background:#2c2c2e;color:#0A84FF}
+body.dark .factor{background:#2c2c2e;color:#0A84FF}
 body.dark .day-row,body.dark .guide-card,body.dark .sym-card{background:#1c1c1e}body.dark .day-row{background:#2c2c2e;box-shadow:0 2px 6px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.05)}body.dark .sym-card{border-color:#2c2c2e;background:#222226;box-shadow:0 2px 6px rgba(0,0,0,.35)}body.dark .guide-card{box-shadow:0 0 0 1px #2c2c2e,0 2px 6px rgba(0,0,0,.35)}
 body.dark .day-bar{background:#1c1c1e;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
 body.dark .day-bar-fill{background:#0A84FF}body.dark #dayDetail{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#e5e5ea}body.dark #dayDetail .dd-stats{color:#94a3b8}
@@ -373,12 +359,6 @@ body.dark .peg-tip{background:#2c2c2e}
 body.dark .peg-tip strong{color:#ffffff}
 body.dark .peg-a{color:#c7c7cc}
 
-@media (max-width: 480px) {
-  #cookieBanner,
-  body.dark #cookieBanner {
-    box-shadow: none !important;
-  }
-}
 /* === Reszponzív finomhangolás: mobil / tablet / PC (az elrendezés és színek változatlanok) === */
 body{overflow-x:hidden}
 img,svg{max-width:100%}
@@ -574,6 +554,8 @@ img,svg{max-width:100%}
         <p class="peg-a">On a warm, dry, breezy day (75+) most items dry in about 2–4 hours. On an orange day it may take all day, and on a red day it will not dry outside at all. The Today tab shows an estimated drying time.</p>
         <div class="peg-q">Is line drying cheaper than a tumble dryer?</div>
         <p class="peg-a">Yes. A tumble dryer cycle typically costs well over £1 in electricity, while outdoor drying uses none. On poor days a heated airer or dehumidifier usually costs less than a full tumble cycle.</p>
+        <div class="peg-q">Why might the forecast not match my own garden or drying spot?</div>
+        <p class="peg-a">Weather data covers the wider area around your chosen location and can vary with local conditions such as altitude, hills, valleys and sheltered spots. A garden on a hilltop, at the bottom of a valley, or behind walls, fences and hedges can be windier, damper, colder or drier than the forecast suggests, so treat the score as a general guide and check the actual conditions outside before hanging washing out.</p>
       </div>
     </div>
   </div>
@@ -675,17 +657,11 @@ img,svg{max-width:100%}
 <div class="settings-row"><span>Saved locations</span><span id="locCount" style="font-size:.8rem;color:#64748b">0</span></div>
 <div id="settingsLocs" style="padding:8px 0;display:flex;flex-wrap:wrap;gap:6px"></div>
 <div class="settings-row"><span>Clear all saved data</span><button class="btn btn-ghost" id="clearData" style="font-size:.78rem;padding:7px 12px;color:#dc2626;border-color:#fecaca">Reset</button></div>
-<p style="font-size:.72rem;color:#94a3b8;margin-top:10px">All settings and locations are stored only in your browser (localStorage). No account, no tracking of your personal data beyond analytics cookies.</p>
+<p style="font-size:.72rem;color:#94a3b8;margin-top:10px">All settings and saved locations are stored only in your browser (localStorage). This site has no account system, no advertising, no analytics and no personal data tracking.</p>
 </div>
 </div>
 
 <footer>© <span id="year"></span> PegCast · Peg Forecast · Weather data by <a href="https://www.weatherapi.com/" target="_blank" rel="noopener" style="color:#007AFF;font-weight:600">WeatherAPI.com</a><br><a href="privacy.html" style="color:#64748b;font-weight:600">Privacy</a> · <a href="terms.html" style="color:#64748b;font-weight:600">Terms</a> · <a href="cookies.html" style="color:#64748b;font-weight:600">Cookies</a></footer>
-</div>
-
-<div id="cookieBanner">
-<svg viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;margin:0 auto 8px;display:block"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-4-4 4 4 0 0 1 4-4 10 10 0 0 0-10-2z"/><circle cx="8.5" cy="8.5" r="1" fill="#007AFF" stroke="none"/><circle cx="15.5" cy="15.5" r="1" fill="#007AFF" stroke="none"/><circle cx="12" cy="12" r="1" fill="#007AFF" stroke="none"/><circle cx="11" cy="16.5" r="1" fill="#007AFF" stroke="none"/><circle cx="7" cy="14" r="1" fill="#007AFF" stroke="none"/></svg>
-<p>We use essential cookies to make this site work. With your consent we also use analytics cookies (Google Analytics) and advertising cookies (Google AdSense) to measure traffic and show relevant ads. You can accept or decline non-essential cookies. Read our <a href="cookies.html" style="color:#007AFF;font-weight:600">Cookie Policy</a>.</p>
-<div class="cookie-btns"><button id="acceptCookies">Accept</button><button id="declineCookies">Decline</button></div>
 </div>
 
 <script>
@@ -1511,13 +1487,6 @@ document.addEventListener('click',function(e){
   if(!e.target.closest||!e.target.closest('.ac-wrap'))ac.style.display='none';
 });
 
-var banner=document.getElementById('cookieBanner');
-if(!localStorage.getItem('cookieConsentLaundryDay'))banner.classList.add('show');
-function setConsent(g){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','update',{ad_storage:g,ad_user_data:g,ad_personalization:g,analytics_storage:g});localStorage.setItem('cookieConsentLaundryDay',g==='granted'?'1':'0');banner.classList.remove('show');}
-document.getElementById('acceptCookies').addEventListener('click',function(){setConsent('granted');});
-document.getElementById('declineCookies').addEventListener('click',function(){setConsent('denied');});
-var cs=document.getElementById('cookieSettings');if(cs)cs.addEventListener('click',function(e){e.preventDefault();banner.classList.add('show');});
-
 var darkSwitch=document.getElementById('darkToggleSwitch');
 function applyDark(on){document.body.classList.toggle('dark',on);if(darkSwitch)darkSwitch.checked=on;localStorage.setItem('ld_dark',on?'1':'0');}
 var saved=localStorage.getItem('ld_dark');
@@ -1641,6 +1610,14 @@ window.addEventListener('storage',function(e){if(e.key==='ld_dark'){var v=e.newV
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Yes. A tumble dryer cycle typically costs well over £1 in electricity, while outdoor drying uses none. On poor days a heated airer or dehumidifier usually costs less than a full tumble cycle."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why might the forecast not match my own garden or drying spot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Weather data covers the wider area around your chosen location and can vary with local conditions such as altitude, hills, valleys and sheltered spots. A garden on a hilltop, at the bottom of a valley, or behind walls, fences and hedges can be windier, damper, colder or drier than the forecast suggests, so treat the score as a general guide and check the actual conditions outside before hanging washing out."
       }
     }
   ]
