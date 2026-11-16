@@ -797,8 +797,9 @@ function showDayDetail(idx){
   var bandColor=barColor(dy.score);
   var sh=document.body.classList.contains('dark')?'0 4px 12px rgba(0,0,0,.6)':'0 2px 8px rgba(0,0,0,.06)';
   document.querySelectorAll('#forecastRows .day-row').forEach(function(r,i){r.style.boxShadow=i===idx?'0 0 0 2.5px '+bandColor+','+sh:'';});
-  
-  var isWet = (dy.dayLabel ? dy.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond));
+
+  var _dlDay = dy.dayLabelDay || dy.dayLabel;
+  var isWet = _dlDay ? _dlDay.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond);
   var hangStr = formatHour(dy.hangOutHour);
   var expl;
   
@@ -822,14 +823,14 @@ function showDayDetail(idx){
   } else if (dy.score >= 35) {
     expl = 'OK but slow — it may take all day to dry. Hang out by ' + hangStr + ' and bring in before evening.';
   } else {
-    if (isWet) expl = 'Poor for outdoor drying — ' + ((dy.dayLabel && dy.dayLabel.label) || dy.cond).toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
+    if (isWet) expl = 'Poor for outdoor drying — ' + ((dy.dayLabelDay && dy.dayLabelDay.label) || (dy.dayLabel && dy.dayLabel.label) || dy.condDay || dy.cond).toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
     else expl = 'Poor for outdoor drying — too cold, humid or calm. Laundry is unlikely to dry outside; use a tumble dryer, radiator or dehumidifier.';
   }
 
   var frostNote = dy.morningFrost ? ' <strong>Note:</strong> Morning frost/dew detected (min ' + dy.minTemp.toFixed(1) + '°C). Wait for the frost to clear before hanging out.' : '';
 
   var bestNote=isBest?(dy.score>=35?' This is the best day of the next 3.':' This is the best of the next 3 days, but still poor for drying outside.'):'';
-  var _dc=(dy.dayLabel&&dy.dayLabel.label)||dy.cond||'—';var _dw=isWet;var _dp=Math.max(dy.cr||0,dy.cs||0);
+  var _dc=((_dlDay&&_dlDay.label&&_dlDay.label!=='—')?_dlDay.label:(dy.condDay||dy.cond))||'—';var _dw=isWet;var _dp=dy.dayChance||0;
   var precipStr='';
   if(dy.rain > 0){
     precipStr = dy.rain.toFixed(1) + ' mm' + (_dp > 0 ? ' (' + _dp + '% chance)' : '') + ' · ' + _dc;
@@ -875,7 +876,7 @@ async function check(query,label){
       if (endH <= startH) { startH = 10; endH = 15; }
       
       var temps=[],hums=[],winds=[],rains=[],dews=[],uvs=[],clouds=[],feels=[];
-      var peakMm=0,peakCode=0,peakText='',peakHour=-1;
+      var peakMm=0,peakCode=0,peakText='',peakHour=-1,chanceMax=0;
       for(var h=Math.max(0,startH);h<=Math.min(23,endH);h++){
         var hr=fday.hour[h];if(!hr)continue;
         temps.push(hr.temp_c);
@@ -886,6 +887,8 @@ async function check(query,label){
         uvs.push(hr.uv || 0);
         clouds.push(hr.cloud || 0);
         feels.push(hr.feelslike_c !== undefined ? hr.feelslike_c : hr.temp_c);
+        var _ch=Math.max(+(hr.chance_of_rain||0), +(hr.chance_of_snow||0));
+        if(_ch>chanceMax)chanceMax=_ch;
         if(+(hr.precip_mm||0)>peakMm){peakMm=+hr.precip_mm;peakCode=(hr.condition&&hr.condition.code)||0;peakText=(hr.condition&&hr.condition.text)||'';peakHour=h;}
       }
       var avg=function(a){return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:0;};
@@ -936,7 +939,12 @@ async function check(query,label){
       hangOutHour = Math.round(hangOutHour * 2) / 2;
       
       var notEnoughDaylight = (hangOutHour + dryingHours) > ssH;
-      
+
+      // Csak a napkelte–napnyugta közötti órák alapján készül a csapadékcímke;
+      // az éjszakai eső nem számít, hiszen senki nem tereget sötétben.
+      var dayLabelDay = precipLabel(peakCode, peakText, rainSum, chanceMax, true);
+      var dayCondText = peakText || ((fday.hour[startH] && fday.hour[startH].condition && fday.hour[startH].condition.text) || '');
+
       return {
         score: computeScore(avgTemp, avgHum, avgWind, rainSum, avgDew, avgUV, avgCloud, avgFeels),
         temp: avgTemp,
@@ -955,6 +963,9 @@ async function check(query,label){
         cond: (fday.day.condition && fday.day.condition.text) || '—',
         code: (fday.day.condition && fday.day.condition.code) || 0,
         dayLabel: precipLabel((fday.day.condition && fday.day.condition.code) || 0, (fday.day.condition && fday.day.condition.text) || '', (fday.day.totalprecip_mm || 0), (fday.day.daily_chance_of_rain || 0), true),
+        dayLabelDay: dayLabelDay,
+        dayChance: chanceMax,
+        condDay: dayCondText,
         peak: {mm: peakMm, code: peakCode, text: peakText, hour: peakHour},
         cr: (fday.day.daily_chance_of_rain || 0),
         cs: (fday.day.daily_chance_of_snow || 0),
@@ -972,7 +983,7 @@ async function check(query,label){
     var v=verdict(today.score);
     var ve=document.getElementById('scoreVerdict');ve.textContent=v.text;ve.className='score-verdict '+v.cls;
     
-    var todayIsWet = (today.dayLabel ? today.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(today.cond));
+    var todayIsWet = (today.dayLabelDay ? today.dayLabelDay.wet : (today.dayLabel ? today.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(today.cond)));
     var hangStr = formatHour(today.hangOutHour);
     var tipText = v.tip;
     
@@ -1002,7 +1013,7 @@ async function check(query,label){
     }
 
     if (today.score < 35 && todayIsWet) {
-        tipText = 'Poor for outdoor drying — ' + ((today.dayLabel && today.dayLabel.label) || today.cond).toLowerCase() + ' expected. Use a tumble dryer, radiator or indoor rack.';
+        tipText = 'Poor for outdoor drying — ' + ((today.dayLabelDay && today.dayLabelDay.label) || (today.dayLabel && today.dayLabel.label) || today.condDay || today.cond).toLowerCase() + ' expected. Use a tumble dryer, radiator or indoor rack.';
     }
     document.getElementById('scoreTip').textContent = tipText;
 
@@ -1041,8 +1052,9 @@ async function check(query,label){
         }
       }
     }
-    if(!bannerMsg && today.rain>1 && today.dayLabel && today.dayLabel.wet){
-      bannerMsg=today.dayLabel.label.charAt(0).toUpperCase()+today.dayLabel.label.slice(1)+' expected today — indoor drying advised.';
+    var _dlBanner = today.dayLabelDay || today.dayLabel;
+    if(!bannerMsg && today.rain>1 && _dlBanner && _dlBanner.wet){
+      bannerMsg=_dlBanner.label.charAt(0).toUpperCase()+_dlBanner.label.slice(1)+' expected today — indoor drying advised.';
     }
 
     var _raEl=document.getElementById('rainAlertText');
@@ -1146,10 +1158,11 @@ function estimateDrying(){
     return;
   }
 
-  var isWet = (d.dayLabel ? d.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(d.cond));
+  var _dlDay = d.dayLabelDay || d.dayLabel;
+  var isWet = _dlDay ? _dlDay.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(d.cond);
 
   if(isWet || d.rain>0.2){
-    var _dl=d.dayLabel||precipLabel(d.code||0,d.cond||'',d.rain,0,true);
+    var _dl=_dlDay||precipLabel(d.code||0,d.condDay||d.cond||'',d.rain,0,true);
     var _mmLine=d.rain>0?(' · '+d.rain.toFixed(1)+' mm daytime rain'):'';
     el.innerHTML='<div style="font-size:1.15rem;font-weight:800;color:#ff3b30;margin-bottom:4px">'+_dl.label.charAt(0).toUpperCase()+_dl.label.slice(1)+' expected</div><div style="font-size:.78rem;color:#8e8e93;margin-top:4px">It will not dry outside today — use a tumble dryer, dehumidifier or radiator.'+_mmLine+'</div>';
     return;
@@ -1258,8 +1271,9 @@ function showPlannerDetail(idx){
     expl = 'OK but slow — it may take all day to dry. Hang out by ' + hangTime + ' and bring in before evening.';
   } else {
     dryTime = 'may not fully dry — use indoor';
-    var isWet = (dy.dayLabel ? dy.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond));
-    if (isWet) expl = 'Poor for outdoor drying — ' + ((dy.dayLabel && dy.dayLabel.label) || dy.cond).toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
+    var _dlDayP = dy.dayLabelDay || dy.dayLabel;
+    var isWet = _dlDayP ? _dlDayP.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond);
+    if (isWet) expl = 'Poor for outdoor drying — ' + ((dy.dayLabelDay && dy.dayLabelDay.label) || (dy.dayLabel && dy.dayLabel.label) || dy.condDay || dy.cond).toLowerCase() + ' expected. Laundry will not dry outside; use a tumble dryer, radiator or dehumidifier.';
     else expl = 'Poor for outdoor drying — too cold, humid or calm. Laundry is unlikely to dry outside; use a tumble dryer, radiator or dehumidifier.';
   }
   
@@ -1268,8 +1282,9 @@ function showPlannerDetail(idx){
   
   var rainNote = '';
   var rainAmt = dy.rain >= 0.1 ? ' (' + dy.rain.toFixed(1) + 'mm)' : '';
-  var isWet2 = (dy.dayLabel ? dy.dayLabel.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond));
-  var _dyLabel=(dy.dayLabel&&dy.dayLabel.label)||dy.cond||'Precipitation';
+  var _dlDayR = dy.dayLabelDay || dy.dayLabel;
+  var isWet2 = _dlDayR ? _dlDayR.wet : /rain|snow|sleet|ice|storm|thunder|drizzle|shower|freezing/i.test(dy.cond);
+  var _dyLabel=((_dlDayR&&_dlDayR.label&&_dlDayR.label!=='—')?_dlDayR.label:((dy.dayLabel&&dy.dayLabel.label&&dy.dayLabel.label!=='—')?dy.dayLabel.label:(dy.condDay||dy.cond)))||'Precipitation';
   if (dy.rain >= 0.5 || (isWet2 && dy.rain < 0.1)) {
       rainNote = '<strong style="color:#ff3b30">' + _dyLabel + rainAmt + '.</strong>';
   } else if (dy.rain >= 0.1) {
